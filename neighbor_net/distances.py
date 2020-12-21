@@ -1,12 +1,11 @@
 import sys
 from typing import Tuple
 
-import numpy as np
 
 __author__ = 'Daniel Huson'
 
 
-def read(filename="-") -> Tuple[list,np.array]:
+def read(filename="-") -> Tuple[list,list]:
     if filename == "-":
         ins = sys.stdin
     else:
@@ -21,11 +20,11 @@ def read(filename="-") -> Tuple[list,np.array]:
         if n == 0:
             n = int(line)
             if n <= 0:
-                raise IOError("Number of taxa must be positive, got: " + line)
+                raise IOError("Number of taxa must be positive, got:" ,line)
         else:
-            tokens = line.split()
+            tokens = line.replace("\s\s"," ").split()
             if len(tokens) != n + 1:
-                raise IOError("Wrong number of tokens in line, got: " + line)
+                raise IOError("Wrong number of tokens in line, got:",line)
             labels.append(tokens[0])
             row = []
             for i in range(1, n + 1):
@@ -35,7 +34,7 @@ def read(filename="-") -> Tuple[list,np.array]:
     if ins != sys.stdin:
         ins.close()
 
-    return labels, np.array(rows)
+    return labels, rows
 
 
 def write(labels: [str], matrix: [float], filename="-") -> None:

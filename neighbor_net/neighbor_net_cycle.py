@@ -1,4 +1,3 @@
-import numpy as np
 from collections import deque
 from neighbor_net.net_node import NetNode
 
@@ -41,28 +40,26 @@ def setup_nodes(n_tax: int) -> NetNode:
     return nodes_head
 
 
-def setup_matrix(labels: [str], matrix: [float]) -> np.array:
+def setup_matrix(labels: [str], matrix: [float]) -> [[float]]:
     n = len(labels)
     max_number_of_nodes = max(3, 3 * n - 5)
 
-    values = []
-
-    for i in range(0, max_number_of_nodes + 1):
-        values.append(0.0)
+    values = [[0.0] * (max_number_of_nodes + 1)]
 
     for i in range(0, max_number_of_nodes):
-        values.append(0.0)
+        row=[0.0]
         for j in range(0, max_number_of_nodes):
             if i < n and j < n:
-                values.append(matrix[i][j])
+                row.append(matrix[i][j])
             else:
-                values.append(0)
+                row.append(0)
+        values.append(row)
 
     tmp = labels.copy()
     for i in range(n, max_number_of_nodes):
         tmp.append(str(i))
 
-    return np.array(values).reshape(max_number_of_nodes + 1, max_number_of_nodes + 1)
+    return values
 
 
 def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
