@@ -1,10 +1,12 @@
 import numpy as np
 from collections import deque
+from neighbor_net.net_node import NetNode
+
 
 __author__ = 'Daniel Huson'
 
 
-def compute_neighbor_net_cycle(labels, matrix):
+def compute(labels: [str], matrix) -> [int]:
     n = len(labels)
 
     if n <= 3:
@@ -12,7 +14,7 @@ def compute_neighbor_net_cycle(labels, matrix):
 
     nodes_head = setup_nodes(n)
 
-    mat = setup_matrix(labels, matrix) # matrix is 0-based, mat is 1-based
+    mat = setup_matrix(labels, matrix)  # matrix is 0-based, mat is 1-based
 
     # print("Mat:", mat)
 
@@ -23,10 +25,10 @@ def compute_neighbor_net_cycle(labels, matrix):
     return cycle
 
 
-def setup_nodes(n):
+def setup_nodes(n_tax: int) -> NetNode:
     nodes_head = NetNode(0)
 
-    for i in range(n, 0, -1):
+    for i in range(n_tax, 0, -1):
         node = NetNode(i)
         node.next = nodes_head.next
         nodes_head.next = node
@@ -39,13 +41,13 @@ def setup_nodes(n):
     return nodes_head
 
 
-def setup_matrix(labels, matrix):
+def setup_matrix(labels: [str], matrix: [float]) -> np.array:
     n = len(labels)
     max_number_of_nodes = max(3, 3 * n - 5)
 
     values = []
 
-    for i in range(0, max_number_of_nodes+1):
+    for i in range(0, max_number_of_nodes + 1):
         values.append(0.0)
 
     for i in range(0, max_number_of_nodes):
@@ -60,10 +62,10 @@ def setup_matrix(labels, matrix):
     for i in range(n, max_number_of_nodes):
         tmp.append(str(i))
 
-    return np.array(values).reshape(max_number_of_nodes+1, max_number_of_nodes+1)
+    return np.array(values).reshape(max_number_of_nodes + 1, max_number_of_nodes + 1)
 
 
-def join_nodes(n, mat, nodes_head):
+def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
     num_nodes = n
     num_active = n
     num_clusters = n
@@ -206,12 +208,12 @@ def join_nodes(n, mat, nodes_head):
     return joins
 
 
-def join2way(x, y):
+def join2way(x: NetNode, y: NetNode) -> None:
     x.nbr = y
     y.nbr = x
 
 
-def join3way(x, y, z, joins, mat, nodes_head, num_nodes):
+def join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: [float], nodes_head : NetNode, num_nodes: int) -> NetNode:
     u = NetNode(num_nodes + 1)
     u.ch1 = x
     u.ch2 = y
@@ -255,7 +257,7 @@ def join3way(x, y, z, joins, mat, nodes_head, num_nodes):
     return u
 
 
-def join4way(x2, x, y, y2, joins, mat, nodes_head, num_nodes):
+def join4way(x2: NetNode, x: NetNode, y: NetNode, y2: NetNode, joins: [NetNode], mat: [float], nodes_head: NetNode, num_nodes: int) -> int:
     u = join3way(x2, x, y, joins, mat, nodes_head, num_nodes)
     num_nodes += 2
     join3way(u, u.nbr, y2, joins, mat, nodes_head, num_nodes)
@@ -263,20 +265,20 @@ def join4way(x2, x, y, y2, joins, mat, nodes_head, num_nodes):
     return num_nodes
 
 
-def compute_rx(z, Cx, Cy, mat, nodes_head):
-    Rx = 0.0
+def compute_rx(z: NetNode, c_x: NetNode, c_y: NetNode, mat: [float], nodes_head: NetNode) -> float:
+    r_x = 0.0
 
     p = nodes_head.next
     while p is not None:
-        if p == Cx or p == Cx.nbr or p == Cy or p == Cy.nbr or p.nbr is None:
-            Rx += mat[z.id][p.id]
+        if p == c_x or p == c_x.nbr or p == c_y or p == c_y.nbr or p.nbr is None:
+            r_x += mat[z.id][p.id]
         else:
-            Rx += mat[z.id][p.id] / 2.0
+            r_x += mat[z.id][p.id] / 2.0
         p = p.next
-    return Rx
+    return r_x
 
 
-def expand_nodes(joins, nodes_head):
+def expand_nodes(joins: [NetNode], nodes_head: NetNode) -> [int]:
     x = nodes_head.next
     y = x.next
     z = y.next
@@ -309,7 +311,7 @@ def expand_nodes(joins, nodes_head):
     while x.id != 1:
         x = x.next
 
-    cycle = []
+    cycle = [0]
     a = x
     while True:
         cycle.append(a.id)
@@ -318,39 +320,5 @@ def expand_nodes(joins, nodes_head):
             break
 
     return cycle
-
-
-class NetNode:
-    def __init__(self, _id):
-        self.id = _id
-        self.nbr = None
-        self.ch1 = None
-        self.ch2 = None
-        self.next = None
-        self.prev = None
-        self.Rx = 0.0
-        self.Sx = 0.0
-
-    def create_string(self):
-        string = "[id=" + str(self.id) + ", nbr="
-        string += "null" if self.nbr is None else str(self.nbr.id)
-        string += ", ch1="
-        string += "null" if self.ch1 is None else str(self.ch1.id)
-        string += ", ch2="
-        string += "null" if self.ch2 is None else str(self.ch2.id)
-        string += ", prev="
-        string += "null" if self.prev is None else str(self.prev.id)
-        string += ", next="
-        string += "null" if self.next is None else str(self.next.id)
-        string += ", Rx=" + str(self.Rx)
-        string += ", Sx=" + str(self.Sx)
-        string += "]"
-        return string
-
-
-    def __repr__(self):
-        return self.create_string()
-
-
 
 

@@ -1,29 +1,35 @@
+__author__ = "Daniel H. Huson"
 
-__author__ ="Daniel H. Huson"
 
 class Split:
-    def __init__(self, partA, partB, weight=1):
-        self.partA=list(partA)
-        self.partB = list(partB)
-        self.weight=weight
+    def __init__(self, n_tax: int, part_a: [int], weight=1):
+        self.part_a = set(part_a)
+        self.part_b = set()
+        for t in range(1, n_tax + 1):
+            if t not in self.part_a:
+                self.part_b.add(t)
+        self.weight = weight
 
     def __str__(self):
-        return f'{self.partA} {self.partB} {self.weight}'
+        return f'{self.part_a} {self.part_b} {self.weight}'
 
-    def partA(self):
-        return self.partA
+    def get_part_a(self) -> [int]:
+        return self.part_a
 
-    def partB(self):
-        return self.partB
+    def get_part_b(self) -> [int]:
+        return self.part_b
 
-    def size(self):
-        return min(len(self.partA), len(self.partB))
+    def get_1(self) -> [int]:
+        return self.part_a if 1 in self.part_a else self.part_b
 
-    def trivial(self):
-        return self.size()==1
+    def get_size(self) -> int:
+        return min(len(self.part_a), len(self.part_b))
 
-    def weight(self):
+    def is_trivial(self) -> bool:
+        return self.get_size() == 1
+
+    def get_weight(self) -> float:
         return self.weight
 
-    def set_weight(self,weight):
-        self.weight=weight
+    def set_weight(self, weight: float) -> None:
+        self.weight = weight
