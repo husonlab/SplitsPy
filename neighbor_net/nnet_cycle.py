@@ -1,5 +1,5 @@
 from collections import deque
-from neighbor_net.net_node import NetNode
+from neighbor_net.nnet_node import NetNode
 
 
 __author__ = 'Daniel Huson'
@@ -14,8 +14,6 @@ def compute(labels: [str], matrix) -> [int]:
     nodes_head = setup_nodes(n)
 
     mat = setup_matrix(labels, matrix)  # matrix is 0-based, mat is 1-based
-
-    # print("Mat:", mat)
 
     joins = join_nodes(n, mat, nodes_head)
 

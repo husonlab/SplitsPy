@@ -2,7 +2,7 @@
 
 import sys
 import distances
-import neighbor_net_run
+import nnet_algorithm
 import splits_io
 
 __author__ = "Daniel H. Huson"
@@ -10,7 +10,7 @@ __author__ = "Daniel H. Huson"
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: neighbor_net_run.py input outfile", file=sys.stderr)
+        print("Usage: nnet_algorithm.py input outfile", file=sys.stderr)
         sys.exit(1)
 
     infile = sys.argv[1]
@@ -18,9 +18,9 @@ def main():
 
     labels, matrix = distances.read(infile)
 
-    distances.write(labels, matrix, outfile)
+    # distances.write(labels, matrix, outfile)
 
-    splits, cycle = neighbor_net_run.neighbor_net(labels, matrix)
+    cycle, splits = nnet_algorithm.neighbor_net(labels, matrix)
 
     splits_io.print_splits_nexus(labels,splits,cycle)
 

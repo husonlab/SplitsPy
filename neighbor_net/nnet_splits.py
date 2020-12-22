@@ -1,4 +1,4 @@
-import split
+import csplit
 import math
 
 __author__ = 'Daniel Huson'
@@ -6,11 +6,11 @@ __author__ = 'Daniel Huson'
 CG_EPSILON = 0.0001
 
 
-def compute(n_tax: int, mat: [float], cycle: [int], cutoff=0.0001, constrained=True) -> [split.Split]:
+def compute(n_tax: int, mat: [float], cycle: [int], cutoff=0.0001, constrained=True) -> [csplit.CSplit]:
     if n_tax == 1:
         return []
     elif n_tax == 2:
-        return [split.Split([1], [2], mat[1][2])] if mat[1][2] >= cutoff else []
+        return [csplit.CSplit(n_tax, [1, 2], 2, 2, mat[1][2])] if mat[1][2] >= cutoff else []
 
     d = setup_d(n_tax, mat, cycle)
     x = []
@@ -19,18 +19,17 @@ def compute(n_tax: int, mat: [float], cycle: [int], cutoff=0.0001, constrained=T
         unconstrained_least_squares(n_tax, d,x)
     else:
         w = setup_w(n_tax)
-        x=active_conjugate(n_tax, d, w)
+        x = active_conjugate(n_tax, d, w)
 
     splits = []
 
     index = 0
     for i in range(1, n_tax + 1):
-        a = set()
         for j in range(i + 1, n_tax + 1):
-            a.add(cycle[j])
             if x[index] > cutoff:
-                splits.append(split.Split(n_tax, a, x[index]))
+                splits.append(csplit.CSplit(n_tax, cycle, i + 1, j, x[index]))
             index += 1
+
     return splits
 
 
@@ -98,7 +97,7 @@ def active_conjugate(n_tax: int, d: [float], w: [float]) -> [float]:
             else:
                 circular_conjugate_grads(n_tax, n_pairs, w, AtWd, active, x)
 
-            to_contract = worst_indices(x, 0.1)
+            to_contract = worst_indices(x, 0.6)
             if len(to_contract) > 0:
                 for index in to_contract:
                     x[index] = 0.0

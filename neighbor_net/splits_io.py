@@ -1,10 +1,10 @@
 import sys
-import split
+import csplit
 
 __author__ = "Daniel H. Huson"
 
 
-def print_splits_nexus(labels: [str],splits: [split.Split],cycle: [int],filename="-") -> None:
+def print_splits_nexus(labels: [str], splits: [csplit.CSplit], cycle: [int], filename="-") -> None:
     if filename == "-":
         outs = sys.stdout
     else:
