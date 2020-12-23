@@ -1,10 +1,11 @@
 # Run the neighbor net algorithm
 
 import sys
-import distances
-import nnet_algorithm
-import splits_io
-import network.outline_algorithm
+import phylo_outline.utils.distances as distances
+import phylo_outline.nnet.nnet_algorithm as nnet_algorithm
+from phylo_outline.utils import splits_io
+import phylo_outline.outline.outline_algorithm
+from phylo_outline.utils.graph_utils import networkx
 
 __author__ = "Daniel H. Huson"
 
@@ -23,11 +24,13 @@ def main():
 
     cycle, splits = nnet_algorithm.neighbor_net(labels, matrix)
 
-    splits_io.print_splits_nexus(labels,splits,cycle)
+    splits_io.print_splits_nexus(labels, splits, cycle)
 
-    graph=network.outline_algorithm.compute(labels,cycle,splits)
+    graph = phylo_outline.outline.outline_algorithm.compute(labels, cycle, splits)
 
     graph.write_tgf()
+
+    nx_graph = networkx(graph)
 
 if __name__ == '__main__':
     main()

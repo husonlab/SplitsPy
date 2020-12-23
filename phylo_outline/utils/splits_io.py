@@ -1,7 +1,9 @@
 import sys
-import csplit
+import phylo_outline.utils.csplit
 
 __author__ = "Daniel H. Huson"
+
+from phylo_outline.utils import csplit
 
 
 def print_splits_nexus(labels: [str], splits: [csplit.CSplit], cycle: [int], filename="-") -> None:

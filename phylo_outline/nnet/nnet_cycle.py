@@ -1,5 +1,5 @@
 from collections import deque
-from neighbor_net.nnet_node import NetNode
+from phylo_outline.nnet.nnet_node import NetNode
 
 
 __author__ = 'Daniel Huson'

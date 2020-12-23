@@ -1,5 +1,6 @@
 import sys
 
+
 __author__ = 'Daniel Huson'
 
 
@@ -74,11 +75,17 @@ class Node:
     def id(self):
         return self.__id
 
-    def next (self):
+    def next(self):
         return self.__next
 
-    def prev (self):
+    def prev(self):
         return self.__prev
+
+    def __hash__(self) -> int:
+        return hash(self.__id)
+
+    def __eq__(self,other):
+        return self.__id == other.__id
 
 
 class Edge:
@@ -131,6 +138,12 @@ class Edge:
         if self.__next is not None:
             print(" next =",self.__next.id(),end="")
         print()
+
+    def __hash__(self) -> int:
+        return hash(self.__id)
+
+    def __eq__(self, other):
+        return self.__id == other.__id
 
 
 class Graph(object):

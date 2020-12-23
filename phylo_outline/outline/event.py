@@ -1,5 +1,5 @@
 from typing import Callable
-from neighbor_net.csplit import CSplit
+from phylo_outline.utils.csplit import CSplit
 
 __author__ = "Daniel H. Huson"
 

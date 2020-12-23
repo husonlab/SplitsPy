@@ -1,9 +1,11 @@
 from typing import Tuple
 
-import nnet_cycle
-import nnet_splits
+import phylo_outline.nnet.nnet_cycle
+import phylo_outline.nnet.nnet_splits
 
 __author__ = "Daniel H. Huson"
+
+from phylo_outline.nnet import nnet_cycle, nnet_splits
 
 
 def neighbor_net(labels: [str], mat: [float], cutoff=0.0001, constrained=True) -> Tuple[list,list]:

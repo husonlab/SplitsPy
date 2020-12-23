@@ -1,4 +1,4 @@
-import csplit
+from phylo_outline.utils import csplit
 import math
 
 __author__ = 'Daniel Huson'

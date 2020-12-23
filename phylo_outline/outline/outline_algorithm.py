@@ -1,11 +1,12 @@
 import math
 from enum import Enum
-from neighbor_net.csplit import CSplit
-from network.graph import Graph
-from network.event import Event
-from network.event import radix_sort
+from phylo_outline.utils.csplit import CSplit
+from phylo_outline.outline.graph import Graph
+from phylo_outline.outline.event import Event
+from phylo_outline.outline.event import radix_sort
 
 __author__ = "Daniel H. Huson"
+
 
 
 class Layout(Enum):
@@ -75,7 +76,7 @@ def compute(labels: [str], cycle: [int], splits: [CSplit], layout=Layout.UNROOTE
         if prev_event is not None:
             if event.s() == prev_event.s():
                 for t in splits[event.s()].part2():
-                    v.label = labels[t-1]
+                    prev_node.label = labels[t-1]
                     taxa_found.add(t)
 
         prev_node = v
