@@ -32,7 +32,7 @@ def print_splits_nexus(labels: [str], splits: [csplit.CSplit], cycle: [int], fil
     for split in splits:
         print(f'{split.get_weight():.8f}', end="\t", file=outs)
         first = True
-        for t in split.get_1():
+        for t in split.part1():
             if first:
                 first = False
             else:

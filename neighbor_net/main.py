@@ -4,6 +4,7 @@ import sys
 import distances
 import nnet_algorithm
 import splits_io
+import network.outline_algorithm
 
 __author__ = "Daniel H. Huson"
 
@@ -24,6 +25,9 @@ def main():
 
     splits_io.print_splits_nexus(labels,splits,cycle)
 
+    graph=network.outline_algorithm.compute(labels,cycle,splits)
+
+    graph.write_tgf()
 
 if __name__ == '__main__':
     main()

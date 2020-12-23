@@ -19,6 +19,8 @@ def compute(labels: [str], matrix) -> [int]:
 
     cycle = expand_nodes(joins, nodes_head)
 
+    cycle = normalize_cycle(cycle)
+
     return cycle
 
 
@@ -315,5 +317,38 @@ def expand_nodes(joins: [NetNode], nodes_head: NetNode) -> [int]:
             break
 
     return cycle
+
+
+def normalize_cycle(cycle: [int]) -> [int]:
+    pos_of_1 = 1
+    for i in range(1,len(cycle)):
+        if cycle[i] == 1:
+            pos_of_1 = i
+            break
+
+    last = len(cycle)-1
+    pos_prev = last if pos_of_1 == 1 else pos_of_1-1
+    pos_next = 1 if pos_of_1 == last else pos_of_1+1
+
+    if cycle[pos_prev] >cycle[pos_next]:
+        if pos_of_1 == 1:
+            return cycle
+        else:
+            result = [0]
+            i = pos_of_1
+            while len(result) < len(cycle):
+                result.append(cycle[i])
+                i = i+1 if i <last else 1
+            return result
+    else:
+        result = [0]
+        i = pos_of_1
+        while len(result) < len(cycle):
+            result.append(cycle[i])
+            i = i-1 if i > 1 else last
+        return result
+
+
+
 
 

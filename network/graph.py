@@ -4,10 +4,11 @@ __author__ = 'Daniel Huson'
 
 
 class Node:
-    def __init__(self, id: int, label: str = None, location: [float] = None):
+    def __init__(self, id: int, label: str = None, location: [float] = None, info = None):
         self.__id = id
         self.label = label
         self.location = location
+        self.info = info
 
         self.__prev = None
         self.__next = None
@@ -19,7 +20,7 @@ class Node:
         self.__out_deg = 0
 
     def __str__(self):
-        return f'{self.__id} {self.label}'
+        return f'{self.__id} {self.label}' if self.location is None else f'{self.__id} {self.label} {self.location[0]} {self.location[1]}'
 
     def deg(self) -> int:
         return self.__in_deg+self.__out_deg
@@ -52,6 +53,12 @@ class Node:
             yield e
             e = e._Edge__next_src_edge
 
+    def is_adjacent(self, other) -> bool:
+        for e in self.adj_edges():
+            if e.src() == other or e.tar() == other:
+                return True
+        return False
+
     def children(self):
         e = self.__first_tar_edge
         while e is not None:
@@ -75,12 +82,13 @@ class Node:
 
 
 class Edge:
-    def __init__(self, id: int,  src: Node, tar: Node, label: str = None, weight: float = 1):
+    def __init__(self, id: int,  src: Node, tar: Node, label: str = None, weight: float = 1, info = None):
         self.__id = id
         self.__src = src
         self.__tar = tar
         self.label = label
         self.weight = weight
+        self.info = info
 
         self.__prev = None
         self.__next = None
@@ -156,9 +164,9 @@ class Graph(object):
         self.__n_nodes = 0
         self.__n_edges = 0
 
-    def new_node (self, label: str = None, location: [float] = None) -> Node:
+    def new_node (self, label: str = None, location: [float] = None, info = None) -> Node:
         self.__top_node_id += 1
-        v = Node(self.__top_node_id,label, location)
+        v = Node(self.__top_node_id,label, location, info)
 
         if self.__first_node is None:
             self.__first_node = v
@@ -172,9 +180,9 @@ class Graph(object):
 
         return v
 
-    def new_edge (self, src: Node, tar: Node, label: str = None, weight: float = 1) -> Edge:
+    def new_edge (self, src: Node, tar: Node, label: str = None, weight: float = -1, info=None) -> Edge:
         self.__top_edge_id += 1
-        edge = Edge(self.__top_edge_id,src,tar,label,weight)
+        edge = Edge(self.__top_edge_id,src,tar,label,weight,info)
 
         if self.__first_edge is None:
             self.__first_edge = edge
@@ -281,21 +289,30 @@ class Graph(object):
             yield e
             e = e._Edge__next
 
-    def write_tgf (self,filename="-") -> None:
+    def write_tgf(self,filename="-") -> None:
         if filename == "-":
             outs = sys.stdout
         else:
             outs = open(filename, mode="w")
 
         for v in self.nodes():
-            if v.label is Node:
-                print(v.id(),file=outs)
-            else:
-                print(v.id(),v.label,file=outs)
-        print("#",file=outs)
+            print(v.id(), end="",file=outs)
+            if v.label is not None:
+                print(" ",v.label,end="",file=outs)
+            if v.location is not None:
+                print(" [","{:.6f}".format(v.location[0]),",", "{:.6f}".format(v.location[1]),"]", sep="",end="", file=outs)
+            if v.info is not None:
+                print(" {",v.info,"}",sep="",end="",file=outs)
+            print()
 
         for e in self.edges():
-            print(e.src().id(),e.tar().id(),e.weight,file=outs)
+            print(e.src().id(),e.tar().id(),end="",file=outs)
+            if e.weight != -1:
+                print(" [","{:.6f}".format(e.weight),"]",sep="",end="",file=outs)
+            if e.info is not None:
+                print(" {",e.info,"}",sep="",end="",file=outs)
+            print()
+
 
         if outs != sys.stdout:
             outs.close()
