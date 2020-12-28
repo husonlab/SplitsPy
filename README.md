@@ -1,1 +1,1 @@
-# Neighbor_Net
+# SplitsPy
