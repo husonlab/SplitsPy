@@ -2,13 +2,13 @@
 
 ## Overview
 
-This package provides two main algorithms:
+This package provides a program called outline.py, which implements two algorithms:
 
-1) The neighbor-net algorithm (Bryant and Moulton, 2004), which produces a circular ordering of taxa and a set of circular splits.
+1) The neighbor-net algorithm (Bryant and Moulton, 2004) is used to produce a circular ordering of taxa and a set of circular splits.
 
-2) The outline algorithm for computing a phylogenetic outline (Huson et al, 2021), from the output of the neighbor-net algorithm.
+2) The outline algorithm is then used to compute a phylogenetic outline (Huson et al, 2021), from the output of the neighbor-net algorithm.
 
-The program displays a drawing of the phylogenetic outline (using John Zelle's graphics.py library)
+The program then displays a drawing of the phylogenetic outline (using John Zelle's graphics.py library).
 
 ## Usage:
 
