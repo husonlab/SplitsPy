@@ -16,26 +16,26 @@ Usage: outline.py [options] infile
 
 Run neighbor-net and compute a phylogenetic outline
 
-Options:
-  -h, --help            show this help message and exit
-  -o FILE, --output=FILE
-                        Output file. Save splits in nexus format (for use with SplitsTree5)
-  -n, --no_draw         Do not draw the network
+    Options:
+      -h, --help            show this help message and exit
+      -o FILE, --output=FILE
+                          Output file. Save splits in nexus format (for use with SplitsTree5)
+      -n, --no_draw       Do not draw the network
 
-  Outline Options:
+    Outline Options:
     -r, --rooted        Rooted network
     -a, --alt           Alternative layout rooted network
     -g GRP, --ogroup=GRP
                         Out-group taxa for rooted network (format:
                         tax1,tax2,...)
 
-  Window Options:
+    Window Options:
     --width=WIDTH       Window width
     --height=HEIGHT     Window height
-    --margin_left=ML    Left margin
-    --margin_right=MR   Right margin
-    --margin_top=MT     Top margin
-    --margin_bot=MB     Bottom margin
+    --m_left=MARGIN     Left margin
+    --m_right=MARGIN    Right margin
+    --m_top=MARGIN      Top margin
+    --m_bot=MARGIN      Bottom margin
     --font_size=F_SIZE  Font size
     
 ## Input format:
@@ -43,21 +43,26 @@ Options:
 The program expects to read a distance matrix from input, either from the named input file, or from  standard in, if '-' is supplied as input name.
 The format is as follows:
 
-<span style="font-family: 'Lucida Sans Typewriter';">
-6<br>
-A.andrenof  0 0.090103 0.103397 0.096012 0.004431 0.075332<br>
-A.mellifer  0.090103 0 0.093058 0.090103 0.093058 0.100443<br>
-A.dorsata   0.103397 0.093058 0 0.116691 0.106352 0.103397<br>
-A.cerana    0.096012 0.090103 0.116691 0 0.098966 0.09896<br>
-A.florea    0.004431 0.093058 0.106352 0.098966 0 0.078287<br>
-A.koschev   0.075332 0.100443 0.103397 0.098966 0.078287 0<br>
-</span>
+    6
+    A.andrenof  0 0.090103 0.103397 0.096012 0.004431 0.075332
+    A.mellifer  0.090103 0 0.093058 0.090103 0.093058 0.100443
+    A.dorsata   0.103397 0.093058 0 0.116691 0.106352 0.103397
+    A.cerana    0.096012 0.090103 0.116691 0 0.098966 0.09896
+    A.florea    0.004431 0.093058 0.106352 0.098966 0 0.078287
+    A.koschev   0.075332 0.100443 0.103397 0.098966 0.078287 0
+
 
 ## Output:
 
 The program computes and displays the corresponding phylogenetic outline:
 
 ![Outline](./bees.png)
+
+## Rooted outlines:
+
+The program can also compute a rooted outline. The option -r activates mid-point rooting. If an out-group is given, then the program will attempt to place the root between the out-group taxa and all other taxa:
+
+![Rooted outline](./finches.png)
 
 ## Contributions:
 
