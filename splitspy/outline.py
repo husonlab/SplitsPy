@@ -23,7 +23,6 @@ from splitspy.splits.basic_split import split_dist
 __author__ = "Daniel H. Huson"
 
 
-
 def main():
     parser = OptionParser("%prog [options] infile",
                           description="Run neighbor-net and compute a phylogenetic outline",

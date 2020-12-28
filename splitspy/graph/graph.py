@@ -10,7 +10,7 @@ GPL (http://www.gnu.org/licenses/gpl.html).
 
 import sys
 
-__author__ = 'Daniel Huson'
+__author__ = 'Daniel H. Huson'
 
 
 class Node:

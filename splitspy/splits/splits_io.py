@@ -1,3 +1,10 @@
+# splits_io.py
+"""Basic output of splits
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
+
 import sys
 import splitspy
 from splitspy.splits import basic_split

@@ -1,3 +1,10 @@
+# basic_split.py
+"""Basic implementation of a split
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
+
 import copy
 
 __author__ = "Daniel H. Huson"

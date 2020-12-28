@@ -11,7 +11,7 @@ import math
 import sys
 from typing import Tuple
 
-__author__ = 'Daniel Huson'
+__author__ = 'Daniel H. Huson'
 
 
 def read(filename="-") -> Tuple[list, list]:

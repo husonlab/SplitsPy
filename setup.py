@@ -1,3 +1,11 @@
+# setup.py
+"""Setup splitspy.py
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
+
+
 from setuptools import setup
 
 setup(
