@@ -88,8 +88,8 @@ def compute(labels: [str], cycle: [int], splits: [Split], rooted: bool = False, 
         prev_event = event
 
     lab = []
-    for t in range(1,n_tax+1):
-        if not t in taxa_found:
+    for t in range(1, n_tax+1):
+        if t not in taxa_found:
             lab.append(labels[t-1])
     if len(lab) > 0:
         start.label = join(lab, ",")
@@ -165,8 +165,8 @@ def __translate(xy: [float], angle: float, distance: float) -> [float]:
     return [xy[0] + dx, xy[1] + dy]
 
 
-def __root_location(alt: bool, n_tax: int, out_grp: Set[int], cycle: [int], splits: [Split], use_wgts: bool) -> Tuple[
-    int, float, float]:
+def __root_location(alt: bool, n_tax: int, out_grp: Set[int], cycle: [int], splits: [Split],
+                    use_wts: bool) -> Tuple[int, float, float]:
     dist = basic_split.split_dist(n_tax, splits)
 
     a_set = set()
@@ -216,12 +216,12 @@ def __root_location(alt: bool, n_tax: int, out_grp: Set[int], cycle: [int], spli
     total = 0.0
     for trp in triples:
         sp = splits[trp[2]]
-        wgt = sp.weight if use_wgts else 1.0
+        wgt = sp.weight if use_wts else 1.0
         delta = total + wgt - 0.5 * max_dist
         if delta > 0:
             return split2idx[sp], delta, wgt - delta
         total += wgt
-    return 1, 0.0, splits[0].weight if use_wgts else 1.0
+    return 1, 0.0, splits[0].weight if use_wts else 1.0
 
 
 def __interval(a: int, b: int, cycle: [int], alt: bool) -> Set[int]:
@@ -345,11 +345,11 @@ def rotate(cycle: [int], first: int) -> [int]:
 
 
 def join(lst: [str], sep: str):
-    str = ""
+    s = ""
     for a in lst:
-        if len(str) > 0:
-            str += sep
-        str += a
-    return str
+        if len(s) > 0:
+            s += sep
+        s += a
+    return s
 
 

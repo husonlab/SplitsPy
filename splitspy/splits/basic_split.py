@@ -14,13 +14,8 @@ from typing import Tuple, Set
 
 class Split:
     def __init__(self, part1: [int], part2: [int], weight: float = 1.0):
-        self.__part1 = set()
-        for t in part1:
-            self.__part1.add(t)
-        self.__part2 = set()
-        for t in part2:
-            self.__part2.add(t)
-
+        self.__part1 = set(part1)
+        self.__part2 = set(part2)
         self.weight = weight
 
     def __str__(self):
@@ -87,8 +82,7 @@ def compatible(splits: [Split]) -> bool:
 
 
 def split_dist(n_tax: int, splits: [Split]) -> [[float]]:
-    mat = []
-    mat.append([0] * (n_tax + 1))
+    mat = [[0] * (n_tax + 1)]
 
     for a in range(1, n_tax + 1):
         row = [0]

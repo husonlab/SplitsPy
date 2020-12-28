@@ -21,13 +21,12 @@ def draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0, title: s
          width: int = 1000, height: int = 1000,
          m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,
          font_size: int = 12) -> None:
-
     bw = width - m_left - m_right
     bh = height - m_top - m_bot
 
     if bw > bh:
-        m_left += (bw - bh)/2
-        m_right += (bw - bh)/2
+        m_left += (bw - bh) / 2
+        m_right += (bw - bh) / 2
         bw = bh
     elif bh > bw:
         m_top += (bh - bw) / 2
@@ -64,7 +63,7 @@ def draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0, title: s
             if v.label == "Root":
                 angle = 90
             else:
-                angle = label_angles[i] if label_angles is not None else __angle(center,points[v])
+                angle = label_angles[i] if label_angles is not None else __angle(center, points[v])
             i += 1
             pos = __label_pos(v.label, font_size, angle, points[v], boxes)
             label = Text(pos, v.label)
@@ -109,27 +108,27 @@ def __label_pos(label: str, font_size: int, angle: float, pt: Point, boxes: [[Po
 
 
 def __angle(a: Point, b: Point) -> float:
-    p = Point(b.x-a.x, b.y-a.y)
+    p = Point(b.x - a.x, b.y - a.y)
     if p.x != 0:
-        a = math.atan(math.fabs(p.x)/math.fabs(p.x))
+        a = math.atan(math.fabs(p.x) / math.fabs(p.x))
 
-        if p.x >0:
-            if p.y >0:
-                return a/math.pi*180
+        if p.x > 0:
+            if p.y > 0:
+                return a / math.pi * 180
             else:
-                return (2*math.pi-a)/math.pi*180
+                return (2 * math.pi - a) / math.pi * 180
         else:
-            if p.y >0:
-                return (math.pi-a)/math.pi*180
+            if p.y > 0:
+                return (math.pi - a) / math.pi * 180
             else:
-                return (math.pi+a)/math.pi*180
+                return (math.pi + a) / math.pi * 180
     elif p.y > 0:
-        return (0.5*math.pi) / math.pi * 180
+        return (0.5 * math.pi) / math.pi * 180
     else:
         return (-0.5 * math.pi) / math.pi * 180
 
 
-def __translate (pt: Point, angle: float, dist: float = 5.0) -> Point:
+def __translate(pt: Point, angle: float, dist: float = 5.0) -> Point:
     dx = dist * math.cos(math.pi / 180.0 * angle)
     dy = dist * math.sin(math.pi / 180.0 * angle)
 
@@ -140,12 +139,10 @@ def __translate (pt: Point, angle: float, dist: float = 5.0) -> Point:
     return Point(pt.x + dx, pt.y + dy)
 
 
-def __intersects(box: [Point,float, float], other: [Point, float, float]) -> bool:
-
-    if box[0].x+box[1] < other[0].x or other[0].x+other[1] < box[0].x:
+def __intersects(box: [Point, float, float], other: [Point, float, float]) -> bool:
+    if box[0].x + box[1] < other[0].x or other[0].x + other[1] < box[0].x:
         return False
-    elif box[0].y+box[2] < other[0].y or other[0].y+other[2] < box[0].y:
+    elif box[0].y + box[2] < other[0].y or other[0].y + other[2] < box[0].y:
         return False
     else:
         return True
-

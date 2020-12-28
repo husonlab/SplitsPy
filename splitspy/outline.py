@@ -29,7 +29,7 @@ def main():
                           epilog="Please cite: Huson et al (2021) and Bryant and Moulton (2004)."
                                  " Drawing uses John Zelle's graphics package.")
 
-    parser.add_option("-o", "--output",default ="", action="store", dest="outfile", help="Output file",
+    parser.add_option("-o", "--output", default="", action="store", dest="outfile", help="Output file",
                       metavar="FILE")
 
     parser.add_option("-n", "--no_draw", default=False, action="store_true", dest="no_draw",
@@ -90,12 +90,12 @@ def main():
         splits_io.print_splits_nexus(labels, splits, cycle, fit, filename=outfile)
 
     if options.out_grp != "":
-        names= set(options.out_grp.split(","))
+        names = set(options.out_grp.split(","))
         unknown = names.difference(set(labels))
-        if len(unknown) >0:
+        if len(unknown) > 0:
             raise IOError("Unknown taxa in out-group:", unknown)
         out_grp = set()
-        for t in range(1,len(labels)+1):
+        for t in range(1, len(labels)+1):
             if labels[t-1] in names:
                 out_grp.add(t)
     else:
