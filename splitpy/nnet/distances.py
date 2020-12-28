@@ -1,11 +1,11 @@
+import math
 import sys
 from typing import Tuple
-
 
 __author__ = 'Daniel Huson'
 
 
-def read(filename="-") -> Tuple[list,list]:
+def read(filename="-") -> Tuple[list, list]:
     if filename == "-":
         ins = sys.stdin
     else:
@@ -20,11 +20,11 @@ def read(filename="-") -> Tuple[list,list]:
         if n == 0:
             n = int(line)
             if n <= 0:
-                raise IOError("Number of taxa must be positive, got:" ,line)
+                raise IOError("Number of taxa must be positive, got:", line)
         else:
-            tokens = line.replace("\s\s"," ").split()
+            tokens = line.replace("\\s\\s", " ").split()
             if len(tokens) != n + 1:
-                raise IOError("Wrong number of tokens in line, got:",line)
+                raise IOError("Wrong number of tokens in line, got:", line)
             labels.append(tokens[0])
             row = []
             for i in range(1, n + 1):
@@ -54,3 +54,14 @@ def write(labels: [str], matrix: [float], filename="-") -> None:
 
     if outs != sys.stdout:
         outs.close()
+
+
+def ls_fit(dist: [[float]], sdist: [[float]]) -> float:
+    d_sum2 = 0
+    s_sum2 = 0
+    for i in range(0, len(dist)):
+        for j in range(0, len(dist[i])):
+            d_sum2 += dist[i][j] * dist[i][j]
+            s_sum2 *= math.fabs(dist[i][j] - sdist[i][j])
+
+    return 100.0 * (1.0 - s_sum2 / d_sum2)

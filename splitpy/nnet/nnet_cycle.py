@@ -1,8 +1,7 @@
 from collections import deque
-from phylo_outline.nnet.nnet_node import NetNode
+from splitpy.nnet.nnet_node import NetNode
 
-
-__author__ = 'Daniel Huson'
+__author__ = "David J. Bryant and Daniel H. Huson"
 
 
 def compute(labels: [str], matrix) -> [int]:
@@ -47,17 +46,13 @@ def setup_matrix(labels: [str], matrix: [float]) -> [[float]]:
     values = [[0.0] * (max_number_of_nodes + 1)]
 
     for i in range(0, max_number_of_nodes):
-        row=[0.0]
+        row = [0.0]
         for j in range(0, max_number_of_nodes):
             if i < n and j < n:
                 row.append(matrix[i][j])
             else:
                 row.append(0)
         values.append(row)
-
-    tmp = labels.copy()
-    for i in range(n, max_number_of_nodes):
-        tmp.append(str(i))
 
     return values
 
@@ -109,8 +104,8 @@ def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
                     q = q.next
             p = p.next
 
-        Cx = None
-        Cy = None
+        c_x = None
+        c_y = None
         best = 0.0
 
         p = nodes_head.next
@@ -139,50 +134,50 @@ def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
 
                 q_pq = (num_clusters - 2.0) * d_pq - p.Sx - q.Sx
 
-                if (Cx is None or (q_pq < best)) and (p.nbr != q):
-                    Cx = p
-                    Cy = q
+                if (c_x is None or (q_pq < best)) and (p.nbr != q):
+                    c_x = p
+                    c_y = q
                     best = q_pq
                 q = q.next
             p = p.next
 
-        x = Cx
-        y = Cy
+        x = c_x
+        y = c_y
 
-        if (Cx.nbr is not None) or (Cy.nbr is not None):
-            Cx.Rx = compute_rx(Cx, Cx, Cy, mat, nodes_head)
-            if Cx.nbr is not None:
-                Cx.nbr.Rx = compute_rx(Cx.nbr, Cx, Cy, mat, nodes_head)
-            Cy.Rx = compute_rx(Cy, Cx, Cy, mat, nodes_head)
-            if Cy.nbr is not None:
-                Cy.nbr.Rx = compute_rx(Cy.nbr, Cx, Cy, mat, nodes_head)
+        if (c_x.nbr is not None) or (c_y.nbr is not None):
+            c_x.Rx = compute_rx(c_x, c_x, c_y, mat, nodes_head)
+            if c_x.nbr is not None:
+                c_x.nbr.Rx = compute_rx(c_x.nbr, c_x, c_y, mat, nodes_head)
+            c_y.Rx = compute_rx(c_y, c_x, c_y, mat, nodes_head)
+            if c_y.nbr is not None:
+                c_y.nbr.Rx = compute_rx(c_y.nbr, c_x, c_y, mat, nodes_head)
 
         m = num_clusters
-        if Cx.nbr is not None:
+        if c_x.nbr is not None:
             m += 1
-        if Cy.nbr is not None:
+        if c_y.nbr is not None:
             m += 1
 
-        best = (m - 2.0) * mat[Cx.id][Cy.id] - Cx.Rx - Cy.Rx
-        if Cx.nbr is not None:
-            q_pq = (m - 2.0) * mat[Cx.nbr.id][Cy.id] - Cx.nbr.Rx - Cy.Rx
+        best = (m - 2.0) * mat[c_x.id][c_y.id] - c_x.Rx - c_y.Rx
+        if c_x.nbr is not None:
+            q_pq = (m - 2.0) * mat[c_x.nbr.id][c_y.id] - c_x.nbr.Rx - c_y.Rx
             if q_pq < best:
-                x = Cx.nbr
-                y = Cy
+                x = c_x.nbr
+                y = c_y
                 best = q_pq
 
-        if Cy.nbr is not None:
-            q_pq = (m - 2.0) * mat[Cx.id][Cy.nbr.id] - Cx.Rx - Cy.nbr.Rx
+        if c_y.nbr is not None:
+            q_pq = (m - 2.0) * mat[c_x.id][c_y.nbr.id] - c_x.Rx - c_y.nbr.Rx
             if q_pq < best:
-                x = Cx
-                y = Cy.nbr
+                x = c_x
+                y = c_y.nbr
                 best = q_pq
 
-        if (Cx.nbr is not None) and (Cy.nbr is not None):
-            q_pq = (m - 2.0) * mat[Cx.nbr.id][Cy.nbr.id] - Cx.nbr.Rx - Cy.nbr.Rx
+        if (c_x.nbr is not None) and (c_y.nbr is not None):
+            q_pq = (m - 2.0) * mat[c_x.nbr.id][c_y.nbr.id] - c_x.nbr.Rx - c_y.nbr.Rx
             if q_pq < best:
-                x = Cx.nbr
-                y = Cy.nbr
+                x = c_x.nbr
+                y = c_y.nbr
 
         if x.nbr is None and y.nbr is None:
             join2way(x, y)
@@ -210,7 +205,8 @@ def join2way(x: NetNode, y: NetNode) -> None:
     y.nbr = x
 
 
-def join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: [float], nodes_head : NetNode, num_nodes: int) -> NetNode:
+def join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: [float], nodes_head: NetNode,
+             num_nodes: int) -> NetNode:
     u = NetNode(num_nodes + 1)
     u.ch1 = x
     u.ch2 = y
@@ -254,7 +250,8 @@ def join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: [float],
     return u
 
 
-def join4way(x2: NetNode, x: NetNode, y: NetNode, y2: NetNode, joins: [NetNode], mat: [float], nodes_head: NetNode, num_nodes: int) -> int:
+def join4way(x2: NetNode, x: NetNode, y: NetNode, y2: NetNode, joins: [NetNode], mat: [float], nodes_head: NetNode,
+             num_nodes: int) -> int:
     u = join3way(x2, x, y, joins, mat, nodes_head, num_nodes)
     num_nodes += 2
     join3way(u, u.nbr, y2, joins, mat, nodes_head, num_nodes)
@@ -321,16 +318,16 @@ def expand_nodes(joins: [NetNode], nodes_head: NetNode) -> [int]:
 
 def normalize_cycle(cycle: [int]) -> [int]:
     pos_of_1 = 1
-    for i in range(1,len(cycle)):
+    for i in range(1, len(cycle)):
         if cycle[i] == 1:
             pos_of_1 = i
             break
 
-    last = len(cycle)-1
-    pos_prev = last if pos_of_1 == 1 else pos_of_1-1
-    pos_next = 1 if pos_of_1 == last else pos_of_1+1
+    last = len(cycle) - 1
+    pos_prev = last if pos_of_1 == 1 else pos_of_1 - 1
+    pos_next = 1 if pos_of_1 == last else pos_of_1 + 1
 
-    if cycle[pos_prev] >cycle[pos_next]:
+    if cycle[pos_prev] > cycle[pos_next]:
         if pos_of_1 == 1:
             return cycle
         else:
@@ -338,17 +335,12 @@ def normalize_cycle(cycle: [int]) -> [int]:
             i = pos_of_1
             while len(result) < len(cycle):
                 result.append(cycle[i])
-                i = i+1 if i <last else 1
+                i = i + 1 if i < last else 1
             return result
     else:
         result = [0]
         i = pos_of_1
         while len(result) < len(cycle):
             result.append(cycle[i])
-            i = i-1 if i > 1 else last
+            i = i - 1 if i > 1 else last
         return result
-
-
-
-
-

@@ -1,3 +1,6 @@
+__author__ = "David J. Bryant and Daniel H. Huson"
+
+
 class NetNode:
     def __init__(self, _id):
         self.id = _id

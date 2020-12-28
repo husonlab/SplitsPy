@@ -1,22 +1,22 @@
-from phylo_outline.utils import csplit
+from splitpy.splits.basic_split import *
 import math
 
-__author__ = 'Daniel Huson'
+__author__ = "David J. Bryant and Daniel H. Huson"
 
 CG_EPSILON = 0.0001
 
 
-def compute(n_tax: int, mat: [float], cycle: [int], cutoff=0.0001, constrained=True) -> [csplit.CSplit]:
+def compute(n_tax: int, mat: [float], cycle: [int], cutoff=0.00001, constrained=True) -> [Split]:
     if n_tax == 1:
         return []
     elif n_tax == 2:
-        return [csplit.CSplit(n_tax, [1, 2], 2, 2, mat[1][2])] if mat[1][2] >= cutoff else []
+        return [cyc_split([1, 2], 2, 2, mat[1][2])] if mat[1][2] >= cutoff else []
 
     d = setup_d(n_tax, mat, cycle)
     x = []
 
     if not constrained:
-        unconstrained_least_squares(n_tax, d,x)
+        unconstrained_least_squares(n_tax, d, x)
     else:
         w = setup_w(n_tax)
         x = active_conjugate(n_tax, d, w)
@@ -27,7 +27,7 @@ def compute(n_tax: int, mat: [float], cycle: [int], cutoff=0.0001, constrained=T
     for i in range(1, n_tax + 1):
         for j in range(i + 1, n_tax + 1):
             if x[index] > cutoff:
-                splits.append(csplit.CSplit(n_tax, cycle, i + 1, j, x[index]))
+                splits.append(cyc_split(cycle, i + 1, j, x[index]))
             index += 1
 
     return splits
@@ -84,7 +84,7 @@ def active_conjugate(n_tax: int, d: [float], w: [float]) -> [float]:
     for k in range(0, n_pairs):
         y[k] = w[k] * d[k]
 
-    AtWd = calculate_Atx(n_tax, y)
+    at_wd = calculate_Atx(n_tax, y)
 
     old_x = [1.0] * n_pairs
 
@@ -95,14 +95,14 @@ def active_conjugate(n_tax: int, d: [float], w: [float]) -> [float]:
             if first_pass:
                 first_pass = False
             else:
-                circular_conjugate_grads(n_tax, n_pairs, w, AtWd, active, x)
+                circular_conjugate_grads(n_tax, n_pairs, w, at_wd, active, x)
 
             to_contract = worst_indices(x, 0.6)
             if len(to_contract) > 0:
                 for index in to_contract:
                     x[index] = 0.0
                     active[index] = True
-                circular_conjugate_grads(n_tax, n_pairs, w, AtWd, active, x)
+                circular_conjugate_grads(n_tax, n_pairs, w, at_wd, active, x)
 
             min_i = -1
             min_xi = -1.0
@@ -130,7 +130,7 @@ def active_conjugate(n_tax: int, d: [float], w: [float]) -> [float]:
         min_grad = 1.0
 
         for i in range(0, n_pairs):
-            r[i] -= AtWd[i]
+            r[i] -= at_wd[i]
             r[i] *= 2.0
             if active[i]:
                 grad_ij = r[i]
@@ -184,11 +184,11 @@ def row_sum(n: int, d: [float], k: int) -> float:
     return r
 
 
-def worst_indices(x: [float], prop_kept:float) -> [int]:
+def worst_indices(x: [float], prop_kept: float) -> [int]:
     if prop_kept == 0.0:
         return []
 
-    prop_kept=0.1
+    prop_kept = 0.1
 
     n_pairs = len(x)
 
@@ -196,14 +196,14 @@ def worst_indices(x: [float], prop_kept:float) -> [int]:
     for value in x:
         if value < 0:
             x_cpy.append(value)
-    numNeg = len(x_cpy)
+    n_neg = len(x_cpy)
 
-    if numNeg == 0:
+    if n_neg == 0:
         return []
 
     x_cpy.sort()
 
-    n_kept = math.ceil(prop_kept * numNeg)
+    n_kept = math.ceil(prop_kept * n_neg)
     cutoff = x_cpy[n_kept - 1]
 
     front = 0
