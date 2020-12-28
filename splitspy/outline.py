@@ -51,10 +51,14 @@ def main():
                         metavar="WIDTH", type="int")
     win_opts.add_option("--height", default=800, action="store", dest="win_height", help="Window height",
                         metavar="HEIGHT", type="int")
-    win_opts.add_option("--margin_left", default=100, action="store", dest="ml", help="Left margin", type="int")
-    win_opts.add_option("--margin_right", default=100, action="store", dest="mr", help="Right margin", type="int")
-    win_opts.add_option("--margin_top", default=100, action="store", dest="mt", help="Top margin", type="int")
-    win_opts.add_option("--margin_bot", default=100, action="store", dest="mb", help="Bottom margin", type="int")
+    win_opts.add_option("--m_left", default=100, action="store", dest="ml", help="Left margin", type="int",
+                        metavar="MARGIN")
+    win_opts.add_option("--m_right", default=100, action="store", dest="mr", help="Right margin", type="int",
+                        metavar="MARGIN")
+    win_opts.add_option("--m_top", default=100, action="store", dest="mt", help="Top margin", type="int",
+                        metavar="MARGIN")
+    win_opts.add_option("--m_bot", default=100, action="store", dest="mb", help="Bottom margin", type="int",
+                        metavar="MARGIN")
     win_opts.add_option("--font_size", default=12, action="store", dest="f_size", help="Font size", type="int")
 
     parser.add_option_group(win_opts)

@@ -31,7 +31,7 @@ def compute(labels: [str], cycle: [int], splits: [Split], rooted: bool = False, 
     splits = __add_trivial(n_tax, cycle, splits)
 
     angles = __leaf_angles(n_tax, 360.0 if not rooted else 160.0)
-    split2angle = __compute_angles(angles,cycle, splits)
+    split2angle = __compute_angles(angles, cycle, splits)
 
     events = __setup_events(n_tax, cycle, splits)
 
@@ -91,7 +91,7 @@ def compute(labels: [str], cycle: [int], splits: [Split], rooted: bool = False, 
     for t in range(1,n_tax+1):
         if not t in taxa_found:
             lab.append(labels[t-1])
-    if len(lab)>0:
+    if len(lab) > 0:
         start.label = join(lab, ",")
 
     return graph, angles

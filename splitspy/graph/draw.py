@@ -17,8 +17,10 @@ from .graphics import *
 __author__ = 'Daniel H. Huson'
 
 
-def draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0, title: str = "Outline", width: int = 1000, height: int = 1000,
-         m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,  font_size: int = 12, rotate: float = 0) -> None:
+def draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0, title: str = "Outline",
+         width: int = 1000, height: int = 1000,
+         m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,
+         font_size: int = 12) -> None:
 
     bw = width - m_left - m_right
     bh = height - m_top - m_bot
@@ -59,7 +61,10 @@ def draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0, title: s
     for v in graph.nodes():
         # Circle(points[v], 0.5).draw(win)
         if v.label is not None:
-            angle = label_angles[i] if label_angles is not None else __angle(center,points[v])
+            if v.label == "Root":
+                angle = 90
+            else:
+                angle = label_angles[i] if label_angles is not None else __angle(center,points[v])
             i += 1
             pos = __label_pos(v.label, font_size, angle, points[v], boxes)
             label = Text(pos, v.label)
@@ -124,7 +129,7 @@ def __angle(a: Point, b: Point) -> float:
         return (-0.5 * math.pi) / math.pi * 180
 
 
-def __translate (pt: Point, angle: float, dist: float = 100.0) -> Point:
+def __translate (pt: Point, angle: float, dist: float = 5.0) -> Point:
     dx = dist * math.cos(math.pi / 180.0 * angle)
     dy = dist * math.sin(math.pi / 180.0 * angle)
 
