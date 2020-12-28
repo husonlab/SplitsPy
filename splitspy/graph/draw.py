@@ -1,9 +1,20 @@
+# draw.py
+"""Draws a phylogenetic outline
+
+Draws a phylogenetic outline, using John Zelle's graphics library
+
+See: Huson et al (2021)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
 import math
 
 from splitspy.graph.graph import Graph
 from .graphics import *
 
-__author__ = 'Daniel Huson'
+__author__ = 'Daniel H. Huson'
 
 
 def draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0, title: str = "Outline", width: int = 1000, height: int = 1000,

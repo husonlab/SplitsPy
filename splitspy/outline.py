@@ -1,4 +1,16 @@
-# Run the neighbor net algorithm
+# outline.py
+"""Program that computes a phylogenetic outline for a distance matrix, using neighbor-net
+
+Given a distance matrix on a set of taxa, this program runs the neighbor-net algorithm
+and then computes a phylogenetic outline. The outline is drawn in a graphics window
+
+See: Bryant and Moulton (2004)
+See: Huson et al (2021)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
 
 import splitspy.nnet.distances as distances
 import splitspy.nnet.nnet_algo as nnet_algorithm

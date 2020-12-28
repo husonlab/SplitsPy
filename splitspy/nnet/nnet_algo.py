@@ -1,3 +1,13 @@
+# nnet_alg.py
+"""Runs the neighbor-net algorithm
+
+See: Bryant and Moulton (2004)
+See: Huson and Bryant (2006)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
 from typing import Tuple
 
 __author__ = "David J. Bryant and Daniel H. Huson"

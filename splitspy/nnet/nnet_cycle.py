@@ -1,3 +1,13 @@
+# nnet_cyc.py
+"""Runs the neighbor-net algorithm to compute a cycle
+
+See: Bryant and Moulton (2004)
+See: Huson and Bryant (2006)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
 from collections import deque
 from splitspy.nnet.nnet_node import NetNode
 

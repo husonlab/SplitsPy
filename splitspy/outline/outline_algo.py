@@ -1,3 +1,13 @@
+# outline_alg.py
+"""Computes a phylogenetic outline from a set of circular splits
+
+See: Bryant and Moulton (2004)
+See: Huson et al (2021)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
 import math
 from typing import Set, Tuple, List
 

@@ -1,3 +1,13 @@
+# graph.py
+"""A simple graph implementation using linked lists
+
+See: Huson et al (2021)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
+
 import sys
 
 __author__ = 'Daniel Huson'

@@ -1,3 +1,13 @@
+# event.py
+"""An event used in the outline algorithm
+
+See: Huson et al (2021)
+
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
+
 from typing import Callable
 from splitspy.splits.basic_split import Split
 

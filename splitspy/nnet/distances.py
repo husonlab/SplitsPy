@@ -1,3 +1,12 @@
+# distances.py
+"""Read, write and other methods for phylogenetic distance matrices
+
+See: Huson et al (2021)
+
+LICENSE: This is open-source software released under the terms of the
+GPL (http://www.gnu.org/licenses/gpl.html).
+"""
+
 import math
 import sys
 from typing import Tuple
