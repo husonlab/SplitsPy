@@ -1,6 +1,6 @@
 import math
 
-from splitpy.graph.graph import Graph
+from splitspy.graph.graph import Graph
 from .graphics import *
 
 __author__ = 'Daniel Huson'

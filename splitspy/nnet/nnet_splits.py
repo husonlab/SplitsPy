@@ -1,4 +1,4 @@
-from splitpy.splits.basic_split import *
+from splitspy.splits.basic_split import *
 import math
 
 __author__ = "David J. Bryant and Daniel H. Huson"

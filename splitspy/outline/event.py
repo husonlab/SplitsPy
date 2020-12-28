@@ -1,5 +1,5 @@
 from typing import Callable
-from splitpy.splits.basic_split import Split
+from splitspy.splits.basic_split import Split
 
 __author__ = "Daniel H. Huson"
 

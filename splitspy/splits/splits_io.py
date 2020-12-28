@@ -1,6 +1,6 @@
 import sys
-import splitpy
-from splitpy.splits import basic_split
+import splitspy
+from splitspy.splits import basic_split
 
 __author__ = "Daniel H. Huson"
 
@@ -27,7 +27,7 @@ def print_splits_nexus(labels: [str], splits: [basic_split.Split], cycle: [int],
     print("PROPERTIES", end=" ", file=outs)
     if fit != -1:
         print("fit=", fit, end=" ", file=outs)
-    print("compatible" if splitpy.splits.basic_split.compatible(splits) else "cyclic", ",", sep="", file=outs)
+    print("compatible" if splitspy.splits.basic_split.compatible(splits) else "cyclic", ",", sep="", file=outs)
     print("CYCLE", end="", file=outs)
     for i in range(1, len(cycle)):
         print(" ", cycle[i], sep="", end="", file=outs)

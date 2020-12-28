@@ -1,5 +1,5 @@
 from collections import deque
-from splitpy.nnet.nnet_node import NetNode
+from splitspy.nnet.nnet_node import NetNode
 
 __author__ = "David J. Bryant and Daniel H. Huson"
 

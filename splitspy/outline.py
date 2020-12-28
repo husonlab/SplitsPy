@@ -1,12 +1,12 @@
 # Run the neighbor net algorithm
 
-import splitpy.nnet.distances as distances
-import splitpy.nnet.nnet_algo as nnet_algorithm
-from splitpy.graph import draw
-from splitpy.splits import splits_io
-import splitpy.outline.outline_algo
+import splitspy.nnet.distances as distances
+import splitspy.nnet.nnet_algo as nnet_algorithm
+from splitspy.graph import draw
+from splitspy.splits import splits_io
+import splitspy.outline.outline_algo
 from optparse import OptionParser, OptionGroup
-from splitpy.splits.basic_split import split_dist
+from splitspy.splits.basic_split import split_dist
 
 __author__ = "Daniel H. Huson"
 
@@ -86,8 +86,8 @@ def main():
     else:
         out_grp = None
 
-    graph, angles = splitpy.outline.outline_algo.compute(labels, cycle, splits, rooted=options.rooted,
-                                                         out_grp=out_grp, alt=options.alt)
+    graph, angles = splitspy.outline.outline_algo.compute(labels, cycle, splits, rooted=options.rooted,
+                                                          out_grp=out_grp, alt=options.alt)
 
     # graph.write_tgf()
 
