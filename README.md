@@ -18,9 +18,11 @@ Download source files from GitHub or use pip:
 
 ## Usage:
 
-Usage: splitspy.outline.py [options] infile
+Usage:
+     
+    python splitspy.outline.py [options] infile
 
-Run neighbor-net and compute a phylogenetic outline
+Runs neighbor-net and computes a phylogenetic outline
 
     Options:
       -h, --help            show this help message and exit
