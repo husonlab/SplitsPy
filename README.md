@@ -18,7 +18,7 @@ Download source files from GitHub or use pip:
 
 ## Usage:
 
-Usage: outline.py [options] infile
+Usage: splitspy.outline.py [options] infile
 
 Run neighbor-net and compute a phylogenetic outline
 
@@ -60,7 +60,7 @@ The format is as follows:
 
 ## Output:
 
-The program computes and displays the corresponding phylogenetic outline:
+The program runs the neighbor-net algorithm and then computes and displays the corresponding phylogenetic outline:
 
 ![Outline](./bees.png)
 
