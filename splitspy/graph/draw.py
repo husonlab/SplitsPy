@@ -20,19 +20,16 @@ __author__ = 'Daniel H. Huson'
 def draw(file_name: str, graph: Graph, label_angles: [float] = None, fit: float = -1.0,
          width: int = 1000, height: int = 1000,
          m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,
-         font_size: int = 12) -> None:
+         font_size: int = 12, scale_factor: int =5) -> None:
 
-    scale = 5
-
-    width *= scale
-    height *= scale
-    m_left *= scale
-    m_right *= scale
-    m_top *= scale
-    m_bot *= scale
-    fit_font_size = 10*scale
-    font_size *= scale
-    line_width = scale
+    width *= scale_factor
+    height *= scale_factor
+    m_left *= scale_factor
+    m_right *= scale_factor
+    m_top *= scale_factor
+    m_bot *= scale_factor
+    font_size *= scale_factor
+    line_width = scale_factor
 
     bw = width - m_left - m_right
     bh = height - m_top - m_bot
@@ -60,7 +57,7 @@ def draw(file_name: str, graph: Graph, label_angles: [float] = None, fit: float 
     black = (0, 0, 0)
 
     if fit != -1:
-        im_draw.text((40*scale, 10*scale), "Fit: " + ("{:.2f}".format(fit)), font=ImageFont.truetype("Arial",size=fit_font_size), fill=black)
+        im_draw.text((40*scale_factor, 10*scale_factor), "Fit: " + ("{:.2f}".format(fit)), font=ImageFont.truetype("Arial",size=10*scale_factor), fill=black)
 
     center = (0.5 * width, 0.5 * height)
 
