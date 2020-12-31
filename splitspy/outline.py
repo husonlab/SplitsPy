@@ -29,11 +29,11 @@ def main():
                           epilog="Please cite: Huson et al (2021) and Bryant and Moulton (2004)."
                                  " Drawing uses John Zelle's graphics package.")
 
-    parser.add_option("-o", "--output", default="", action="store", dest="outfile", help="Output file",
+    parser.add_option("-o", "--output", default="", action="store", dest="outfile", help="Output image file",
                       metavar="FILE")
 
-    parser.add_option("-n", "--no_draw", default=False, action="store_true", dest="no_draw",
-                      help="Do not draw the network")
+    parser.add_option("-n", "--nexus", default="", action="store_true", dest="nexus_file",
+                      help="Nexus output file for splits",  metavar="FILE")
 
     outline_opts = OptionGroup(parser, "Outline Options")
     outline_opts.add_option("-r", "--rooted", default=False, action="store_true", dest="rooted", help="Rooted network")
@@ -59,7 +59,8 @@ def main():
                         metavar="MARGIN")
     win_opts.add_option("--m_bot", default=100, action="store", dest="mb", help="Bottom margin", type="int",
                         metavar="MARGIN")
-    win_opts.add_option("--font_size", default=12, action="store", dest="f_size", help="Font size", type="int")
+    win_opts.add_option("--font_size", default=12, action="store", dest="f_size", help="Font size", type="int",
+                        metavar="SIZE")
 
     parser.add_option_group(win_opts)
 
@@ -78,6 +79,11 @@ def main():
     else:
         outfile = options.outfile
 
+    if options.nexus_file =="":
+        nexus_file = None
+    else:
+        nexus_file = options.nexus_file
+
     labels, matrix = distances.read(infile)
 
     # distances.write(labels, matrix, outfile)
@@ -86,8 +92,8 @@ def main():
 
     fit = distances.ls_fit(matrix, split_dist(len(labels), splits))
 
-    if outfile is not None:
-        splits_io.print_splits_nexus(labels, splits, cycle, fit, filename=outfile)
+    if nexus_file is not None:
+        splits_io.print_splits_nexus(labels, splits, cycle, fit, filename=nexus_file)
 
     if options.out_grp != "":
         names = set(options.out_grp.split(","))
@@ -106,10 +112,8 @@ def main():
 
     # graph.write_tgf()
 
-    if not options.no_draw:
-        title = infile if infile != "-" else "Phylogenetic outline"
-        draw.draw(graph, angles, fit, title, options.win_width, options.win_height, options.ml,
-                  options.mr, options.mt, options.mb, options.f_size)
+    draw.draw(outfile, graph, angles, fit, options.win_width, options.win_height, options.ml,
+              options.mr, options.mt, options.mb, options.f_size)
 
 
 if __name__ == '__main__':
