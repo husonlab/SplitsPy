@@ -8,7 +8,7 @@ This package provides a program called outline.py that provides an implementatio
 
 2) The outline algorithm is then used to compute a phylogenetic outline (Huson et al, 2021), from the output of the neighbor-net algorithm.
 
-The program then displays a drawing of the phylogenetic outline (using John Zelle's graphics.py library).
+The program uses [Pillow](https://github.com/python-pillow/Pillow) to render the phylogenetic outline.
 
 ## Installation:
 
@@ -27,8 +27,9 @@ Runs neighbor-net and computes a phylogenetic outline
     Options:
       -h, --help            show this help message and exit
       -o FILE, --output=FILE
-                          Output file. Save splits in nexus format (for use with SplitsTree5)
-      -n, --no_draw       Do not draw the network
+                          Output graphics file. If no file given, will create temporary image file and display.
+      -n FILE, --nexus=FILE
+                          Output splits in nexus format (for input into SplitsTree5.
 
     Outline Options:
     -r, --rooted        Rooted network
@@ -64,13 +65,13 @@ The format is as follows:
 
 The program runs the neighbor-net algorithm and then computes and displays the corresponding phylogenetic outline:
 
-![Outline](./bees.png)
+![Outline](./examples/bees.png)
 
 ## Rooted outlines:
 
 The program can also compute a rooted outline. The option -r activates mid-point rooting. If an out-group is given, then the program will attempt to place the root between the out-group taxa and all other taxa:
 
-![Rooted outline](./finches.png)
+![Rooted outline](./examples/finches.png)
 
 ## Contributions:
 
