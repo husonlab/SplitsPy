@@ -10,11 +10,19 @@ This package provides a program called outline.py that provides an implementatio
 
 The program then displays a drawing of the phylogenetic outline (using John Zelle's graphics.py library).
 
+## Installation:
+
+Download source files from GitHub or use pip:
+
+        pip install SplitsPy
+
 ## Usage:
 
-Usage: outline.py [options] infile
+Usage:
+     
+    python splitspy.outline.py [options] infile
 
-Run neighbor-net and compute a phylogenetic outline
+Runs neighbor-net and computes a phylogenetic outline
 
     Options:
       -h, --help            show this help message and exit
@@ -54,7 +62,7 @@ The format is as follows:
 
 ## Output:
 
-The program computes and displays the corresponding phylogenetic outline:
+The program runs the neighbor-net algorithm and then computes and displays the corresponding phylogenetic outline:
 
 ![Outline](./bees.png)
 
