@@ -26,8 +26,7 @@ __author__ = "Daniel H. Huson"
 def main():
     parser = OptionParser("%prog [options] infile",
                           description="Run neighbor-net and compute a phylogenetic outline",
-                          epilog="Please cite: Huson et al (2021) and Bryant and Moulton (2004)."
-                                 " Drawing uses John Zelle's graphics package.")
+                          epilog="Please cite: Huson et al (2021) and Bryant and Moulton (2004).")
 
     parser.add_option("-o", "--output", default="", action="store", dest="outfile", help="Output image file",
                       metavar="FILE")
