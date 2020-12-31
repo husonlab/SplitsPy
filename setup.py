@@ -15,4 +15,7 @@ setuptools.setup(name='SplitsPy',
                  author='Daniel H. Huson',
                  author_email='daniel.huson@uni-tuebingen.de',
                  description='Phylogenetic outlines',
+                 keywords='phylogenetics, network',
+                 entry_points={'console_scripts': ['outline=splitspy.outline:main',],},
+                 python_requires='>=3.5, <4',
                  install_requires=["pillow"])
