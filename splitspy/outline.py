@@ -94,7 +94,7 @@ def main():
     outline_opts.add_option("-a", "--alt", default=False, action="store_true", dest="alt",
                             help="alternative layout for rooted network")
 
-    outline_opts.add_option("-g", "--out_grp", default="", action="store", type="string", dest="out_grp",
+    outline_opts.add_option("-g", "--out_grp", default="", action="store", type="string", dest="out_grp_labels",
                             help="out-group taxa for rooted network (format: tax1,tax2,...)", metavar="GRP")
 
     parser.add_option_group(outline_opts)
@@ -127,12 +127,17 @@ def main():
     if len(args) >= 2:
         raise IOError("Too many arguments", args)
 
-    if options.out_grp == "":
-        out_grp = None
-    else:
-        out_grp = set(options.out_grp.split(","))
-
     labels, matrix = distances.read(infile)
+
+    out_grp = set()
+    if options.out_grp_labels is not None and options.out_grp_labels != "":
+        out_grp_labels = set(options.out_grp_labels.split(","))
+        unknown = out_grp_labels.difference(set(labels))
+        if len(unknown) > 0:
+            raise IOError("Unknown taxa in out-group:", unknown)
+        for t in range(1, len(labels) + 1):
+            if labels[t - 1] in out_grp_labels:
+                out_grp.add(t)
 
     run(labels, matrix, outfile=options.outfile, nexus_file=options.nexus_file, graph_file=options.graph_file,
         rooted=options.rooted, alt=options.alt, out_grp=out_grp,
@@ -141,18 +146,9 @@ def main():
 
 
 def run(labels: [str], matrix: [[float]], outfile: str = "", nexus_file: str = "", graph_file: str = "",
-        rooted: bool = False, alt: bool = False, out_grp: Set[str] = None, win_width: int = 1000, win_height: int = 800,
+        rooted: bool = False, alt: bool = False, out_grp: Set[int] = None, win_width: int = 1000, win_height: int = 800,
         m_left: int = 100, m_right: int = 100, m_top: int = 100, m_bot: int = 100, font_size: int = 12) -> None:
 
-    out_grp_ids = set()
-    if out_grp is not None:
-        unknown = out_grp.difference(set(labels))
-        if len(unknown) > 0:
-            raise IOError("Unknown taxa in out-group:", unknown)
-        out_grp = set()
-        for t in range(1, len(labels) + 1):
-            if labels[t - 1] in out_grp:
-                out_grp_ids.add(t)
 
     # distances.write(labels, matrix, outfile)
 
@@ -163,8 +159,7 @@ def run(labels: [str], matrix: [[float]], outfile: str = "", nexus_file: str = "
     if nexus_file != "":
         splits_io.print_splits_nexus(labels, splits, cycle, fit, filename=nexus_file)
 
-    graph, angles = splitspy.outline.outline_algo.compute(labels, cycle, splits, rooted=rooted,
-                                                          out_grp=out_grp_ids, alt=alt)
+    graph, angles = splitspy.outline.outline_algo.compute(labels, cycle, splits, rooted=rooted, out_grp=out_grp, alt=alt)
 
     if graph_file != "":
         graph.write_tgf(outfile=graph_file)

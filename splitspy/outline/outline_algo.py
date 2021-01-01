@@ -25,7 +25,10 @@ def compute(labels: [str], cycle: [int], splits: [Split], rooted: bool = False, 
     n_tax = len(labels)
 
     if rooted:
-        s, w1, w2 = __root_location(alt, n_tax, out_grp, cycle, splits, use_wts)
+        if out_grp is None or len(out_grp) == 0:
+            s, w1, w2 = __root_location_mid_point(alt, n_tax, cycle, splits, use_wts)
+        else:
+            s, w1, w2 = __root_location_out_group(out_grp, splits, use_wts)
         n_tax, labels, splits, cycle = __setup_rooted(alt, labels, splits, cycle, s, w1, w2)
 
     splits = __add_trivial(n_tax, cycle, splits)
@@ -165,32 +168,18 @@ def __translate(xy: [float], angle: float, distance: float) -> [float]:
     return [xy[0] + dx, xy[1] + dy]
 
 
-def __root_location(alt: bool, n_tax: int, out_grp: Set[int], cycle: [int], splits: [Split],
-                    use_wts: bool) -> Tuple[int, float, float]:
+def __root_location_mid_point(alt: bool, n_tax: int, cycle: [int], splits: [Split], use_wts: bool)\
+        -> Tuple[int, float, float]:
     dist = basic_split.split_dist(n_tax, splits)
-
-    a_set = set()
-    b_set = set()
-
-    if out_grp is not None and len(out_grp) > 0:
-        for t in range(1, n_tax + 1):
-            if t in out_grp:
-                a_set.add(t)
-            else:
-                b_set.add(t)
-    else:
-        for t in range(1, n_tax + 1):
-            a_set.add(t)
-            b_set.add(t)
 
     max_dist = 0.0
     furthest = [0, 0]
 
-    for a in a_set:
-        for b in b_set:
-            if a != b and dist[a][b] > max_dist:
+    for a in range(1,n_tax+1):
+        for b in range(a+1,n_tax+1):
+            if dist[a][b] > max_dist:
                 max_dist = dist[a][b]
-                furthest = [a, b]
+                furthest = [min(a, b), max(a, b)]
 
     split2idx = {}
 
@@ -255,6 +244,36 @@ def __interval(a: int, b: int, cycle: [int], alt: bool) -> Set[int]:
                 else:
                     i += 1
     return interval
+
+
+def __root_location_out_group(out_grp: Set[int],  splits: [Split],use_wts: bool) -> Tuple[int, float, float]:
+
+    if len(out_grp) > 0:
+        out_grp_splits = set()
+        out_grp_taxon = min(out_grp)
+
+        for p in range(0, len(splits)):
+            pa = splits[p].part_in(out_grp_taxon)
+            if out_grp <= pa:
+                ok = True
+                to_delete = set()
+                for q in out_grp_splits:
+                    qa = splits[q].part_in(out_grp_taxon)
+                    if qa <= pa:
+                        ok = False
+                        break
+                    elif pa <= qa:
+                        to_delete.add(q)
+                if len(to_delete) > 0:
+                    out_grp_splits.difference_update(to_delete)
+                if ok:
+                    out_grp_splits.add(p)
+
+        if len(out_grp_splits) > 0:
+            s = min(out_grp_splits)
+            return s, 0.9*splits[s].weight, 0.1*splits[s].weight
+
+    return 1, 0.0, splits[0].weight if use_wts else 1.0
 
 
 def __setup_rooted(alt: bool, labels0: [str], splits0: [Split], cycle0: [int], mid: int, w1: float, w2: float) -> Tuple:
@@ -329,7 +348,6 @@ def __setup_rooted(alt: bool, labels0: [str], splits0: [Split], cycle0: [int], m
     splits.append(cyc_split(cycle, 2, n_tax, total_wgt / len(splits) if total_wgt > 0 else 1.0))
 
     return n_tax, labels, splits, cycle
-
 
 def rotate(cycle: [int], first: int) -> [int]:
     result = [0]
