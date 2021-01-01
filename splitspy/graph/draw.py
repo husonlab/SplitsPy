@@ -17,7 +17,7 @@ from splitspy.graph.graph import Graph
 __author__ = 'Daniel H. Huson'
 
 
-def draw(file_name: str, graph: Graph, label_angles: [float] = None, fit: float = -1.0,
+def draw(outfile: str, graph: Graph, label_angles: [float] = None, fit: float = -1.0,
          width: int = 1000, height: int = 1000,
          m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,
          font_size: int = 12, scale_factor: int =5) -> None:
@@ -80,10 +80,10 @@ def draw(file_name: str, graph: Graph, label_angles: [float] = None, fit: float 
             pos = __label_pos(v.label, font_size, angle, points[v], boxes)
             im_draw.text(pos, v.label, font=font, fill=black)
 
-    if file_name == None:
+    if outfile is None or outfile == "":
         im.show()
     else:
-        im.save(file_name)
+        im.save(outfile)
 
 
 def __label_pos(label: str, font_size: int, angle: float, pt: Tuple[float,float], boxes: [[Tuple[float,float], float, float]]) -> Tuple[float,float]:

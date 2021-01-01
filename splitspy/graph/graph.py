@@ -325,11 +325,11 @@ class Graph(object):
 
         return x_min, x_max, y_min, y_max
 
-    def write_tgf(self, filename="-") -> None:
-        if filename == "-":
+    def write_tgf(self, outfile="-") -> None:
+        if outfile == "-":
             outs = sys.stdout
         else:
-            outs = open(filename, mode="w")
+            outs = open(outfile, mode="w")
 
         for v in self.nodes():
             print(v.id(), end="", file=outs)
