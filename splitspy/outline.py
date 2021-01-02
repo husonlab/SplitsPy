@@ -17,7 +17,7 @@ import splitspy.nnet.distances as distances
 import splitspy.nnet.nnet_algo as nnet_algorithm
 from splitspy.graph import draw
 from splitspy.splits import splits_io
-import splitspy.outline.outline_algo
+import splitspy.outlines.outline_algo
 from optparse import OptionParser, OptionGroup
 from splitspy.splits.basic_split import split_dist
 
@@ -159,7 +159,7 @@ def run(labels: [str], matrix: [[float]], outfile: str = "", nexus_file: str = "
     if nexus_file != "":
         splits_io.print_splits_nexus(labels, splits, cycle, fit, filename=nexus_file)
 
-    graph, angles = splitspy.outline.outline_algo.compute(labels, cycle, splits, rooted=rooted, out_grp=out_grp, alt=alt)
+    graph, angles = splitspy.outlines.outline_algo.compute(labels, cycle, splits, rooted=rooted, out_grp=out_grp, alt=alt)
 
     if graph_file != "":
         graph.write_tgf(outfile=graph_file)

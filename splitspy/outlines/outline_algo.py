@@ -14,8 +14,8 @@ from typing import Set, Tuple, List
 from splitspy.splits import basic_split
 from splitspy.splits.basic_split import Split, cyc_split
 from splitspy.graph.graph import Graph
-from splitspy.outline.event import Event
-from splitspy.outline.event import radix_sort
+from splitspy.outlines.event import Event
+from splitspy.outlines.event import radix_sort
 
 __author__ = "Daniel H. Huson"
 
