@@ -121,10 +121,9 @@ def main():
 
     if len(args) == 1:
         infile = args[0]
+    elif len(args) == 0:
+        raise IOError("Must specify input file (use - for stdin)")
     else:
-        infile = "-"
-
-    if len(args) >= 2:
         raise IOError("Too many arguments", args)
 
     labels, matrix = distances.read(infile)
