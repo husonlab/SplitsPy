@@ -9,6 +9,9 @@ LICENSE: This is open-source software released under the terms of the
 GPL (http://www.gnu.org/licenses/gpl.html).
 """
 from collections import deque
+
+import numpy as np
+
 from splitspy.nnet.nnet_node import NetNode
 
 __author__ = "David J. Bryant and Daniel H. Huson"
@@ -49,20 +52,16 @@ def setup_nodes(n_tax: int) -> NetNode:
     return nodes_head
 
 
-def setup_matrix(labels: [str], matrix: [float]) -> [[float]]:
+def setup_matrix(labels: [str], matrix: [float]) -> np.array:
     n = len(labels)
     max_number_of_nodes = max(3, 3 * n - 5)
 
-    values = [[0.0] * (max_number_of_nodes + 1)]
+    values = np.zeros(((max_number_of_nodes + 1),(max_number_of_nodes + 1)))
 
     for i in range(0, max_number_of_nodes):
-        row = [0.0]
         for j in range(0, max_number_of_nodes):
             if i < n and j < n:
-                row.append(matrix[i][j])
-            else:
-                row.append(0)
-        values.append(row)
+                values[i+1][j+1] = matrix[i][j]
 
     return values
 
