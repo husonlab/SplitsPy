@@ -20,7 +20,7 @@ Download source files from GitHub or use pip:
 
 Usage:
      
-    python splitspy.outline.py [options] infile
+    outline [options] infile
 
 Runs neighbor-net and computes a phylogenetic outline
 
