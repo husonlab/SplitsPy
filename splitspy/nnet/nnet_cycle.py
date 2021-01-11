@@ -9,9 +9,7 @@ LICENSE: This is open-source software released under the terms of the
 GPL (http://www.gnu.org/licenses/gpl.html).
 """
 from collections import deque
-
 import numpy as np
-
 from splitspy.nnet.nnet_node import NetNode
 
 __author__ = "David J. Bryant and Daniel H. Huson"
@@ -23,20 +21,20 @@ def compute(labels: [str], matrix) -> [int]:
     if n <= 3:
         return list(range(0, n + 1))
 
-    nodes_head = setup_nodes(n)
+    nodes_head = __setup_nodes(n)
 
-    mat = setup_matrix(labels, matrix)  # matrix is 0-based, mat is 1-based
+    mat = __setup_matrix(labels, matrix)  # matrix is 0-based, mat is 1-based
 
-    joins = join_nodes(n, mat, nodes_head)
+    joins = __join_nodes(n, mat, nodes_head)
 
-    cycle = expand_nodes(joins, nodes_head)
+    cycle = __expand_nodes(joins, nodes_head)
 
-    cycle = normalize_cycle(cycle)
+    cycle = __normalize_cycle(cycle)
 
     return cycle
 
 
-def setup_nodes(n_tax: int) -> NetNode:
+def __setup_nodes(n_tax: int) -> NetNode:
     nodes_head = NetNode(0)
 
     for i in range(n_tax, 0, -1):
@@ -52,21 +50,21 @@ def setup_nodes(n_tax: int) -> NetNode:
     return nodes_head
 
 
-def setup_matrix(labels: [str], matrix: [float]) -> np.array:
+def __setup_matrix(labels: [str], matrix: [float]) -> np.array:
     n = len(labels)
     max_number_of_nodes = max(3, 3 * n - 5)
 
-    values = np.zeros(((max_number_of_nodes + 1),(max_number_of_nodes + 1)))
+    mat = np.empty(((max_number_of_nodes + 1), (max_number_of_nodes + 1)))
 
     for i in range(0, max_number_of_nodes):
         for j in range(0, max_number_of_nodes):
             if i < n and j < n:
-                values[i+1][j+1] = matrix[i][j]
+                mat[i+1][j+1] = matrix[i][j]
 
-    return values
+    return mat
 
 
-def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
+def __join_nodes(n: int, mat: np.array, nodes_head: NetNode) -> [NetNode]:
     num_nodes = n
     num_active = n
     num_clusters = n
@@ -78,9 +76,9 @@ def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
             p = nodes_head.next
             q = p.next if (p.next != p.nbr) else p.next.next
             if mat[p.id][q.id] + mat[p.nbr.id][q.nbr.id] < mat[p.id][q.nbr.id] + mat[p.nbr.id][q.id]:
-                join3way(p, q, q.nbr, joins, mat, nodes_head, num_nodes)
+                __join3way(p, q, q.nbr, joins, mat, nodes_head, num_nodes)
             else:
-                join3way(p, q.nbr, q, joins, mat, nodes_head, num_nodes)
+                __join3way(p, q.nbr, q, joins, mat, nodes_head, num_nodes)
             num_nodes += 2
             break
 
@@ -154,12 +152,12 @@ def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
         y = c_y
 
         if (c_x.nbr is not None) or (c_y.nbr is not None):
-            c_x.Rx = compute_rx(c_x, c_x, c_y, mat, nodes_head)
+            c_x.Rx = __compute_rx(c_x, c_x, c_y, mat, nodes_head)
             if c_x.nbr is not None:
-                c_x.nbr.Rx = compute_rx(c_x.nbr, c_x, c_y, mat, nodes_head)
-            c_y.Rx = compute_rx(c_y, c_x, c_y, mat, nodes_head)
+                c_x.nbr.Rx = __compute_rx(c_x.nbr, c_x, c_y, mat, nodes_head)
+            c_y.Rx = __compute_rx(c_y, c_x, c_y, mat, nodes_head)
             if c_y.nbr is not None:
-                c_y.nbr.Rx = compute_rx(c_y.nbr, c_x, c_y, mat, nodes_head)
+                c_y.nbr.Rx = __compute_rx(c_y.nbr, c_x, c_y, mat, nodes_head)
 
         m = num_clusters
         if c_x.nbr is not None:
@@ -189,33 +187,33 @@ def join_nodes(n: int, mat: [float], nodes_head: NetNode) -> [NetNode]:
                 y = c_y.nbr
 
         if x.nbr is None and y.nbr is None:
-            join2way(x, y)
+            __join2way(x, y)
             num_clusters -= 1
         elif x.nbr is None:
-            join3way(x, y, y.nbr, joins, mat, nodes_head, num_nodes)
+            __join3way(x, y, y.nbr, joins, mat, nodes_head, num_nodes)
             num_nodes += 2
             num_active -= 1
             num_clusters -= 1
         elif (y.nbr is None) or (num_active == 4):
-            join3way(y, x, x.nbr, joins, mat, nodes_head, num_nodes)
+            __join3way(y, x, x.nbr, joins, mat, nodes_head, num_nodes)
             num_nodes += 2
             num_active -= 1
             num_clusters -= 1
         else:
-            num_nodes = join4way(x.nbr, x, y, y.nbr, joins, mat, nodes_head, num_nodes)
+            num_nodes = __join4way(x.nbr, x, y, y.nbr, joins, mat, nodes_head, num_nodes)
             num_active -= 2
             num_clusters -= 1
 
     return joins
 
 
-def join2way(x: NetNode, y: NetNode) -> None:
+def __join2way(x: NetNode, y: NetNode) -> None:
     x.nbr = y
     y.nbr = x
 
 
-def join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: [float], nodes_head: NetNode,
-             num_nodes: int) -> NetNode:
+def __join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: np.array, nodes_head: NetNode,
+               num_nodes: int) -> NetNode:
     u = NetNode(num_nodes + 1)
     u.ch1 = x
     u.ch2 = y
@@ -259,16 +257,16 @@ def join3way(x: NetNode, y: NetNode, z: NetNode, joins: [NetNode], mat: [float],
     return u
 
 
-def join4way(x2: NetNode, x: NetNode, y: NetNode, y2: NetNode, joins: [NetNode], mat: [float], nodes_head: NetNode,
-             num_nodes: int) -> int:
-    u = join3way(x2, x, y, joins, mat, nodes_head, num_nodes)
+def __join4way(x2: NetNode, x: NetNode, y: NetNode, y2: NetNode, joins: [NetNode], mat: np.array, nodes_head: NetNode,
+               num_nodes: int) -> int:
+    u = __join3way(x2, x, y, joins, mat, nodes_head, num_nodes)
     num_nodes += 2
-    join3way(u, u.nbr, y2, joins, mat, nodes_head, num_nodes)
+    __join3way(u, u.nbr, y2, joins, mat, nodes_head, num_nodes)
     num_nodes += 2
     return num_nodes
 
 
-def compute_rx(z: NetNode, c_x: NetNode, c_y: NetNode, mat: [float], nodes_head: NetNode) -> float:
+def __compute_rx(z: NetNode, c_x: NetNode, c_y: NetNode, mat: np.array, nodes_head: NetNode) -> float:
     r_x = 0.0
 
     p = nodes_head.next
@@ -281,7 +279,7 @@ def compute_rx(z: NetNode, c_x: NetNode, c_y: NetNode, mat: [float], nodes_head:
     return r_x
 
 
-def expand_nodes(joins: [NetNode], nodes_head: NetNode) -> [int]:
+def __expand_nodes(joins: [NetNode], nodes_head: NetNode) -> [int]:
     x = nodes_head.next
     y = x.next
     z = y.next
@@ -325,7 +323,7 @@ def expand_nodes(joins: [NetNode], nodes_head: NetNode) -> [int]:
     return cycle
 
 
-def normalize_cycle(cycle: [int]) -> [int]:
+def __normalize_cycle(cycle: [int]) -> [int]:
     pos_of_1 = 1
     for i in range(1, len(cycle)):
         if cycle[i] == 1:

@@ -10,7 +10,6 @@ GPL (http://www.gnu.org/licenses/gpl.html).
 """
 import math
 from typing import Set, Tuple, List
-
 from splitspy.splits import basic_split
 from splitspy.splits.basic_split import Split, cyc_split
 from splitspy.graph.graph import Graph

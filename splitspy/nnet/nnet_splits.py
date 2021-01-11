@@ -11,7 +11,6 @@ GPL (http://www.gnu.org/licenses/gpl.html).
 
 import math
 import numpy as np
-
 from splitspy.splits.basic_split import *
 
 __author__ = "David J. Bryant and Daniel H. Huson"
@@ -25,14 +24,14 @@ def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001, constrained
     elif n_tax == 2:
         return [cyc_split([1, 2], 2, 2, mat[1][2])] if mat[1][2] >= cutoff else []
 
-    d = setup_d(n_tax, mat, cycle)
+    d = __setup_d(n_tax, mat, cycle)
     x = np.empty(int((n_tax*(n_tax-1))/2))
 
     if not constrained:
-        unconstrained_least_squares(n_tax, d, x)
+        __unconstrained_least_squares(n_tax, d, x)
     else:
-        w = setup_w(n_tax)
-        active_conjugate(n_tax, d, w, x)
+        w = __setup_w(n_tax)
+        __active_conjugate(n_tax, d, w, x)
 
     splits = []
 
@@ -46,7 +45,7 @@ def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001, constrained
     return splits
 
 
-def setup_d(n: int, mat: np.array, cycle: [int]) -> np.array:
+def __setup_d(n: int, mat: np.array, cycle: [int]) -> np.array:
     d = np.empty(int((n*(n-1))/2))
 
     index = 0
@@ -57,11 +56,11 @@ def setup_d(n: int, mat: np.array, cycle: [int]) -> np.array:
     return d
 
 
-def setup_w(n: int) -> np.array:
+def __setup_w(n: int) -> np.array:
     return np.ones(int((n*(n-1))/2))
 
 
-def unconstrained_least_squares(n_tax: int, d: np.array, x: np.array) -> None:
+def __unconstrained_least_squares(n_tax: int, d: np.array, x: np.array) -> None:
 
     index = 0
     for i in range(0, n_tax - 3 + 1):
@@ -78,8 +77,8 @@ def unconstrained_least_squares(n_tax: int, d: np.array, x: np.array) -> None:
     x[index] = (d[index] + d[n_tax - 2] - d[n_tax - 3]) / 2.0
 
 
-def active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
-    unconstrained_least_squares(n_tax, d, x)
+def __active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
+    __unconstrained_least_squares(n_tax, d, x)
 
     if all(a >= 0 for a in x):
         return x
@@ -93,7 +92,7 @@ def active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
         y[k] = w[k] * d[k]
 
     at_wd = np.empty(n_pairs)
-    calculate_Atx(n_tax, y, at_wd)
+    __calculate_Atx(n_tax, y, at_wd)
 
     old_x = np.ones(n_pairs)
 
@@ -107,14 +106,14 @@ def active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
             if first_pass:
                 first_pass = False
             else:
-                circular_conjugate_grads(n_tax, n_pairs, w, at_wd, active, x, r, y)
+                __circular_conjugate_grads(n_tax, n_pairs, w, at_wd, active, x, r, y)
 
-            to_contract = worst_indices(x, 0.6)
+            to_contract = __worst_indices(x, 0.6)
             if len(to_contract) > 0:
                 for index in to_contract:
                     x[index] = 0.0
                     active[index] = 1
-                circular_conjugate_grads(n_tax, n_pairs, w, at_wd, active, x, r, y)
+                __circular_conjugate_grads(n_tax, n_pairs, w, at_wd, active, x, r, y)
 
             min_i = -1
             min_xi = -1.0
@@ -133,10 +132,10 @@ def active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
                 active[min_i] = 1
                 x[min_i] = 0.0
 
-        calculate_AB(n_tax, x, y)
+        __calculate_AB(n_tax, x, y)
         for i in range(0, n_pairs):
             y[i] *= w[i]
-        calculate_Atx(n_tax, y, r)
+        __calculate_Atx(n_tax, y, r)
 
         min_i = -1
         min_grad = 1.0
@@ -156,11 +155,11 @@ def active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
             active[min_i] = 0
 
 
-def calculate_Atx(n: int, d: np.array, r: np.array) -> None:
+def __calculate_Atx(n: int, d: np.array, r: np.array) -> None:
 
     index = 0
     for i in range(0, n - 1):
-        r[index] = row_sum(n, d, i + 1)
+        r[index] = __row_sum(n, d, i + 1)
         index += (n - i - 1)
 
     index = 1
@@ -175,7 +174,7 @@ def calculate_Atx(n: int, d: np.array, r: np.array) -> None:
             index += (n - i - 2) + 1
 
 
-def row_sum(n: int, d: np.array, k: int) -> float:
+def __row_sum(n: int, d: np.array, k: int) -> float:
     r = 0
     index = 0
 
@@ -193,7 +192,7 @@ def row_sum(n: int, d: np.array, k: int) -> float:
     return r
 
 
-def worst_indices(x: np.array, prop_kept: float) -> [int]:
+def __worst_indices(x: np.array, prop_kept: float) -> [int]:
     if prop_kept == 0.0:
         return []
 
@@ -232,16 +231,16 @@ def worst_indices(x: np.array, prop_kept: float) -> [int]:
     return worst
 
 
-def circular_conjugate_grads(n_tax: int, n_pairs: int, W: np.array, b: np.array, active: np.array, x: np.array,
-                             r: np.array, y: np.array) -> None:
+def __circular_conjugate_grads(n_tax: int, n_pairs: int, W: np.array, b: np.array, active: np.array, x: np.array,
+                               r: np.array, y: np.array) -> None:
     k_max = n_tax * (n_tax - 1) / 2
 
-    calculate_AB(n_tax, x, y)
+    __calculate_AB(n_tax, x, y)
 
     for k in range(0, n_pairs):
         y[k] = W[k] * y[k]
 
-    calculate_Atx(n_tax, y, r)
+    __calculate_Atx(n_tax, y, r)
 
     for k in range(0, n_pairs):
         if active[k] == 0:
@@ -249,10 +248,10 @@ def circular_conjugate_grads(n_tax: int, n_pairs: int, W: np.array, b: np.array,
         else:
             r[k] = 0.0
 
-    rho = norm(r)
+    rho = __norm(r)
     rho_old = 0
 
-    e_0 = CG_EPSILON * math.sqrt(norm(b))
+    e_0 = CG_EPSILON * math.sqrt(__norm(b))
     k = 0
 
     u = np.empty(n_pairs)
@@ -267,12 +266,12 @@ def circular_conjugate_grads(n_tax: int, n_pairs: int, W: np.array, b: np.array,
             for i in range(0, n_pairs):
                 p[i] = r[i] + beta * p[i]
 
-        calculate_AB(n_tax, p, y)
+        __calculate_AB(n_tax, p, y)
 
         for i in range(0, n_pairs):
             y[i] *= W[i]
 
-        calculate_Atx(n_tax, y, u)
+        __calculate_Atx(n_tax, y, u)
 
         for i in range(0, n_pairs):
             if active[i] == 1:
@@ -289,10 +288,10 @@ def circular_conjugate_grads(n_tax: int, n_pairs: int, W: np.array, b: np.array,
             r[i] -= alpha * u[i]
 
         rho_old = rho
-        rho = norm(r)
+        rho = __norm(r)
 
 
-def calculate_AB(n: int, b: np.array, d: np.array) -> None:
+def __calculate_AB(n: int, b: np.array, d: np.array) -> None:
     d_index = 0
     for i in range(0, n - 1):
         d_ij = 0.0
@@ -320,7 +319,7 @@ def calculate_AB(n: int, b: np.array, d: np.array) -> None:
             index += 1 + (n - i - 2)
 
 
-def norm(x: np.array) -> float:
+def __norm(x: np.array) -> float:
     n = 0.0
     for value in x:
         n += value * value
