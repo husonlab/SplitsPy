@@ -8,7 +8,7 @@ GPL (http://www.gnu.org/licenses/gpl.html).
 import setuptools
 
 setuptools.setup(name='SplitsPy',
-                 version='0.0.6-alpha',
+                 version='0.0.7',
                  packages=setuptools.find_packages(),
                  url='http://github.com/husonlab/SplitsPhy',
                  license='GPL',

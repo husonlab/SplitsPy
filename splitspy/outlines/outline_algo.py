@@ -349,6 +349,7 @@ def __setup_rooted(alt: bool, labels0: [str], splits0: [Split], cycle0: [int], m
 
     return n_tax, labels, splits, cycle
 
+
 def rotate(cycle: [int], first: int) -> [int]:
     result = [0]
     for i in range(1, len(cycle)):
