@@ -8,7 +8,7 @@ GPL (http://www.gnu.org/licenses/gpl.html).
 import setuptools
 
 setuptools.setup(name='SplitsPy',
-                 version='0.0.8',
+                 version='0.0.9',
                  packages=setuptools.find_packages(),
                  url='http://github.com/husonlab/SplitsPhy',
                  license='GPL',
@@ -18,4 +18,4 @@ setuptools.setup(name='SplitsPy',
                  keywords='phylogenetics, network',
                  entry_points={'console_scripts': ['outline=splitspy.outline:main', ], },
                  python_requires='>=3.5, <4',
-                 install_requires=["pillow", "numpy"])
+                 install_requires=['numpy', 'pillow'])

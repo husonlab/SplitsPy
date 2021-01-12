@@ -30,8 +30,7 @@ def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001, constrained
     if not constrained:
         __unconstrained_least_squares(n_tax, d, x)
     else:
-        w = __setup_w(n_tax)
-        __active_conjugate(n_tax, d, w, x)
+        __active_conjugate(n_tax, d, x)
 
     splits = []
 
@@ -56,10 +55,6 @@ def __setup_d(n: int, mat: np.array, cycle: [int]) -> np.array:
     return d
 
 
-def __setup_w(n: int) -> np.array:
-    return np.ones(int((n*(n-1))/2))
-
-
 def __unconstrained_least_squares(n_tax: int, d: np.array, x: np.array) -> None:
 
     index = 0
@@ -77,7 +72,8 @@ def __unconstrained_least_squares(n_tax: int, d: np.array, x: np.array) -> None:
     x[index] = (d[index] + d[n_tax - 2] - d[n_tax - 3]) / 2.0
 
 
-def __active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> None:
+def __active_conjugate(n_tax: int, d: np.array, x: np.array) -> None:
+
     __unconstrained_least_squares(n_tax, d, x)
 
     if all(a >= 0 for a in x):
@@ -88,6 +84,8 @@ def __active_conjugate(n_tax: int, d: np.array, w: np.array, x: np.array) -> Non
     active = np.zeros(n_pairs, dtype=np.int8)
 
     y = np.empty(n_pairs)
+    w = np.ones(n_pairs)
+
     for k in range(0, n_pairs):
         y[k] = w[k] * d[k]
 
