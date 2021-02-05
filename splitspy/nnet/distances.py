@@ -67,10 +67,10 @@ def write(labels: [str], matrix: [float], filename="-") -> None:
 
 def ls_fit(dist: [[float]], sdist: [[float]]) -> float:
     d_sum2 = 0
-    s_sum2 = 0
+    diff_sum2 = 0
     for i in range(0, len(dist)):
         for j in range(0, len(dist[i])):
             d_sum2 += dist[i][j] * dist[i][j]
-            s_sum2 *= math.fabs(dist[i][j] - sdist[i][j])
+            diff_sum2 *= (dist[i][j] - sdist[i][j])*(dist[i][j] - sdist[i][j])
 
-    return 100.0 * (1.0 - s_sum2 / d_sum2)
+    return max(0.0, 100.0 * (1.0 - diff_sum2 / d_sum2))
