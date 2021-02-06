@@ -19,6 +19,24 @@ CG_EPSILON = 0.0001
 
 
 def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001, constrained=True) -> [Split]:
+    """ compute splits and their weights using ordinary or constrained least squares
+        Parameters
+        ----------
+            n_tax: int
+               number of taxa
+            mat: np.array
+                distance matrix, 0-based
+            cycle: [int]
+                circular ordering, 1-based
+            cutoff: float
+               minimum split weight
+            constrained: bool
+                constrained or ordinary least squares
+        Returns
+        -------
+            [Split]
+                splits with weights, taxa are 1-based
+    """
     if n_tax == 1:
         return []
     elif n_tax == 2:

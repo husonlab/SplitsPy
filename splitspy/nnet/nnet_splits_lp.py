@@ -18,12 +18,29 @@ __author__ = "Daniel H. Huson"
 
 
 def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001) -> [Split]:
+    """ compute splits and their weights using Linear Program
+        Parameters
+        ----------
+            n_tax: int
+                number of taxa
+            mat: np.array
+                distance matrix, 0-based
+            cycle: [int]
+                circular ordering, 1-based
+            cutoff: float
+                minimum split weight
+        Returns
+        -------
+            [Split]
+                splits with weights, taxa are 1-based
+          """
+
     if n_tax == 1:
         return []
     elif n_tax == 2:
-        return [cyc_split([1, 2], 2, 2, mat[1][2])] if mat[1][2] >= cutoff else []
+        return [cyc_split([1, 2], 2, 2, mat[0][1])] if mat[0][1] >= cutoff else []
 
-    all = all_splits(cycle)
+    all = __all_splits(cycle)
 
     total = 0.0
     split_counts = np.zeros(len(all),dtype=np.int32)
@@ -70,7 +87,7 @@ def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001) -> [Split]:
     return result
 
 
-def all_splits(cycle: List[int]) -> List[Split]:
+def __all_splits(cycle: List[int]) -> List[Split]:
     splits = []
 
     for p in range(2, len(cycle)):
