@@ -9,12 +9,12 @@ GPL (http://www.gnu.org/licenses/gpl.html).
 
 import math
 import sys
-from typing import Tuple
+from typing import Tuple, List
 
 __author__ = 'Daniel H. Huson'
 
 
-def read(filename="-") -> Tuple[list, list]:
+def read(filename="-") -> Tuple[List[str], List[List[float]]]:
     if filename == "-":
         ins = sys.stdin
     else:
@@ -46,7 +46,7 @@ def read(filename="-") -> Tuple[list, list]:
     return labels, rows
 
 
-def write(labels: [str], matrix: [float], filename="-") -> None:
+def write(labels: [str], matrix: [[float]], filename="-") -> None:
     if filename == "-":
         outs = sys.stdout
     else:

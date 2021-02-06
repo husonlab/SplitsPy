@@ -81,7 +81,7 @@ def __active_conjugate(n_tax: int, d: np.array, x: np.array) -> None:
 
     n_pairs = len(d)
 
-    active = np.zeros(n_pairs, dtype=np.int8)
+    active = np.zeros(n_pairs, dtype=np.int32)
 
     y = np.empty(n_pairs)
     w = np.ones(n_pairs)
