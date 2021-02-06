@@ -16,8 +16,6 @@ from splitspy.splits.basic_split import *
 
 __author__ = "Daniel H. Huson"
 
-CG_EPSILON = 0.0001
-
 
 def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001) -> [Split]:
     if n_tax == 1:

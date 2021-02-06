@@ -18,4 +18,4 @@ setuptools.setup(name='SplitsPy',
                  keywords='phylogenetics, network',
                  entry_points={'console_scripts': ['outline=splitspy.outline:main', ], },
                  python_requires='>=3.5, <4',
-                 install_requires=['numpy', 'pillow'])
+                 install_requires=['numpy', 'pillow', 'scipy'])
