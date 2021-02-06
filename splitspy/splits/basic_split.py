@@ -22,9 +22,28 @@ class Split:
         return f'{self.part1()} {self.weight: .8f}'
 
     def part1(self) -> Set[int]:
+        """ get part of split
+
+            Parameters
+            ----------
+            Returns
+            -------
+            Set[int]
+                part 1
+        """
         return self.__part1
 
     def part2(self) -> Set[int]:
+        """ get other part of split
+
+            Parameters
+            ----------
+            Returns
+            -------
+            Set[int]
+                part 2
+        """
+
         return self.__part2
 
     def part_in(self, taxon: int) -> Set[int]:
@@ -82,10 +101,24 @@ def compatible(splits: [Split]) -> bool:
 
 
 def split_dist(n_tax: int, splits: [Split]) -> [[float]]:
-    mat = [[0] * (n_tax + 1)]
+    """ computes splits-based distances between taxa
+
+        Parameters
+            n_tax: int
+                number of taxa
+            splits: [Split]
+                splits
+        ----------
+        Returns
+        -------
+        [[float]]
+            0-based distance matrix
+    """
+
+    mat = []
 
     for a in range(1, n_tax + 1):
-        row = [0]
+        row = []
         for b in range(1, n_tax + 1):
             dist = 0
             for sp in splits:

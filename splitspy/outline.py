@@ -40,6 +40,10 @@ def main():
                             output splits file (Nexus format for SplitsTree5)
         -t FILE, --tgf=FILE output graph file (in trivial graph format)
 
+        Neighbor-net Options:
+        -m, --mode          compute splits weights using OLS (ordinary least squares), CLS (constrained least squares
+                            or LP (linear programming)
+
         Outline Options:
         -r, --rooted        rooted network
         -a, --alt           alternative layout for rooted network
@@ -88,6 +92,13 @@ def main():
     parser.add_option("-t", "--tgf", default="", action="store", dest="graph_file",
                       help="output graph file (in trivial graph format)",  metavar="FILE")
 
+    nnet_opts = OptionGroup(parser, "Neighbor-net Options")
+    nnet_opts.add_option("-m", "--mode", default="CLS", action="store", dest="mode", type="str",
+                         help="compute splits weights using OLS (ordinary least squares), "
+                              "CLS (constrained least squares or LP (linear programming)")
+    nnet_opts.add_option("-c", "--cutoff", default=0.0000001, action="store", dest="cutoff", type="float",
+                         help="Minimum split weight cutoff")
+
     outline_opts = OptionGroup(parser, "Outline Options")
     outline_opts.add_option("-r", "--rooted", default=False, action="store_true", dest="rooted", help="rooted network")
 
@@ -126,6 +137,9 @@ def main():
     else:
         raise IOError("Too many arguments", args)
 
+    if options.mode != "CLS" and options.mode != "OLS" and options.mode != "LP":
+        raise IOError("Unknown --mode: ", options.mode)
+
     labels, matrix = distances.read(infile)
 
     out_grp = set()
@@ -139,19 +153,20 @@ def main():
                 out_grp.add(t)
 
     run(labels, matrix, outfile=options.outfile, nexus_file=options.nexus_file, graph_file=options.graph_file,
-        rooted=options.rooted, alt=options.alt, out_grp=out_grp,
+        mode=options.mode, cutoff=options.cutoff, rooted=options.rooted, alt=options.alt, out_grp=out_grp,
         win_width=options.win_width,win_height=options.win_height, m_left=options.m_left, m_right=options.m_right,
         m_top=options.m_top, m_bot=options.m_bot,font_size=options.font_size)
 
 
 def run(labels: [str], matrix: [[float]], outfile: str = "", nexus_file: str = "", graph_file: str = "",
+        mode: str = "CLS", cutoff: float = 0.0,
         rooted: bool = False, alt: bool = False, out_grp: Set[int] = None, win_width: int = 1000, win_height: int = 800,
         m_left: int = 100, m_right: int = 100, m_top: int = 100, m_bot: int = 100, font_size: int = 12) -> None:
 
 
     # distances.write(labels, matrix, outfile)
 
-    cycle, splits = nnet_algorithm.neighbor_net(labels, matrix)
+    cycle, splits = nnet_algorithm.neighbor_net(labels, matrix, cutoff, mode)
 
     fit = distances.ls_fit(matrix, split_dist(len(labels), splits))
 

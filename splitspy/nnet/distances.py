@@ -66,8 +66,8 @@ def write(labels: [str], matrix: [[float]], filename="-") -> None:
 
 
 def ls_fit(dist: [[float]], sdist: [[float]]) -> float:
-    d_sum2 = 0
-    diff_sum2 = 0
+    d_sum2 = 0.0
+    diff_sum2 = 0.0
     for i in range(0, len(dist)):
         for j in range(0, len(dist[i])):
             d_sum2 += dist[i][j] * dist[i][j]
