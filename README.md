@@ -6,7 +6,7 @@ This package provides a program called outline.py that provides an implementatio
 
 1) The neighbor-net algorithm (Bryant and Moulton, 2004) is used to produce a circular ordering of taxa and a set of circular splits.
 
-2) The outline algorithm is then used to compute a phylogenetic outline (Huson et al, 2021), from the output of the neighbor-net algorithm.
+2) The outline algorithm is then used to compute a phylogenetic outline (Bagci et al, 2021), from the output of the neighbor-net algorithm.
 
 The program uses [Pillow](https://github.com/python-pillow/Pillow) to render the phylogenetic outline.
 
