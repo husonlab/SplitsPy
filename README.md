@@ -6,7 +6,7 @@ This package provides a program called outline.py that provides an implementatio
 
 1) The neighbor-net algorithm (Bryant and Moulton, 2004) is used to produce a circular ordering of taxa and a set of circular splits.
 
-2) The outline algorithm is then used to compute a phylogenetic outline (Huson et al, 2021), from the output of the neighbor-net algorithm.
+2) The outline algorithm is then used to compute a phylogenetic outline (Bagci et al, 2021), from the output of the neighbor-net algorithm.
 
 The program uses [Pillow](https://github.com/python-pillow/Pillow) to render the phylogenetic outline.
 
@@ -81,8 +81,9 @@ The neighbor-net algorithm is due to David J. Bryant and Vincent Moulton (2004).
 
 ## References:
 
-- Daniel H. Huson, Caner Bagci, Banu Cetinkaya and David Bryant. Phylogenetic context and the use of phylogenetic outlines. Manuscript in preparation (2021)
-- [Daniel H. Huson and David Bryant (2006). Application of Phylogenetic Networks in Evolutionary Studies. Mol Biol Evol 23(2):254–267](https://academic.oup.com/mbe/article/23/2/254/1118872)- [David Bryant and Vincent Moulton (2004). Neighbor-net: an agglomerative method for the construction of phylogenetic networks. Mol Biol Evol. 21(2):255-265.](https://academic.oup.com/mbe/article/21/2/255/1187993)
+- Caner Bagci, David Bryant, Banu Cetinkaya, Daniel H Huson, Microbial Phylogenetic Context Using Phylogenetic Outlines, Genome Biology and Evolution, Volume 13, Issue 9, September 2021, evab213, https://doi.org/10.1093/gbe/evab213
+- Daniel H. Huson and David Bryant (2006). Application of Phylogenetic Networks in Evolutionary Studies. Mol Biol Evol 23(2):254–267, https://academic.oup.com/mbe/article/23/2/254/1118872
+- David Bryant and Vincent Moulton (2004). Neighbor-net: an agglomerative method for the construction of phylogenetic networks. Mol Biol Evol. 21(2):255-265, https://academic.oup.com/mbe/article/21/2/255/1187993
 
 
 
