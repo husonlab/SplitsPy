@@ -133,7 +133,7 @@ def main():
     if len(args) == 1:
         infile = args[0]
     elif len(args) == 0:
-        raise IOError("Must specify input file (use - for stdin)")
+        raise IOError("Must specify exactly one input file (use - for stdin)")
     else:
         raise IOError("Too many arguments", args)
 

@@ -15,7 +15,7 @@ from splitspy.nnet.nnet_node import NetNode
 __author__ = "David J. Bryant and Daniel H. Huson"
 
 
-def compute(labels: [str], matrix) -> [int]:
+def compute(labels: [str], matrix: [[float]]) -> [int]:
     n = len(labels)
 
     if n <= 3:

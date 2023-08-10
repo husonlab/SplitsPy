@@ -12,7 +12,7 @@ from splitspy.splits import basic_split
 __author__ = "Daniel H. Huson"
 
 
-def print_splits_nexus(labels: [str], splits: [basic_split.Split], cycle: [int], fit=-1.0, filename="-") -> None:
+def print_splits_nexus(labels: [str], splits: [basic_split.Split], cycle: [int], fit=-1.0, show_weights=True, show_confidence=False, filename="-") -> None:
     if filename == "-":
         outs = sys.stdout
     else:
@@ -30,7 +30,7 @@ def print_splits_nexus(labels: [str], splits: [basic_split.Split], cycle: [int],
 
     print("BEGIN SPLITS;", file=outs)
     print("DIMENSIONS nTax=", len(labels), " nSplits=", len(splits), ";", sep="", file=outs)
-    print("FORMAT labels=no weights=yes confidences=no;", file=outs)
+    print("FORMAT labels=no weights=","yes" if show_weights else "no","confidences=", "yes" if show_confidence else "no",";", file=outs)
     print("PROPERTIES", end=" ", file=outs)
     if fit != -1:
         print("fit=", fit, end=" ", file=outs)
@@ -41,7 +41,11 @@ def print_splits_nexus(labels: [str], splits: [basic_split.Split], cycle: [int],
     print(";", file=outs)
     print("MATRIX", file=outs)
     for sp in splits:
-        print(f'{sp.get_weight():.8f}', end="\t", file=outs)
+        if show_weights:
+            print(f'{sp.get_weight():.8f}', end="\t", file=outs)
+        if show_confidence:
+            print(f'{sp.get_confidence():.8f}', end="\t", file=outs)
+
         first = True
         for t in sp.part1():
             if first:

@@ -13,10 +13,12 @@ from typing import Tuple, Set
 
 
 class Split:
-    def __init__(self, part1: [int], part2: [int], weight: float = 1.0):
+    def __init__(self, part1: [int], part2: [int], weight: float = 1.0, confidence= -1.0, probability=-1.0):
         self.__part1 = set(part1)
         self.__part2 = set(part2)
         self.weight = weight
+        self.confidence = confidence
+        self.probability= probability
 
     def __str__(self):
         return f'{self.part1()} {self.weight: .8f}'
@@ -72,7 +74,19 @@ class Split:
 
     def set_weight(self, weight: float) -> None:
         self.weight = weight
+        
+    def get_confidence(self) -> float:
+        return self.confidence
+    
+    def set_confidence(self, confidence: float) -> None:
+        self.confidence = confidence
 
+    def get_probability(self) -> float:
+        return self.probability
+
+    def set_probability(self, probability: float) -> None:
+        self.probability = probability
+        
     def deepcopy(self):
         return copy.deepcopy(self)
 

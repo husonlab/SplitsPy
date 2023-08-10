@@ -16,7 +16,7 @@ __author__ = "David J. Bryant and Daniel H. Huson"
 from splitspy.nnet import nnet_cycle, nnet_splits, nnet_splits_lp
 
 
-def neighbor_net(labels: [str], mat: [float], cutoff=0.0001, mode: str = "CLS") -> Tuple[list, list]:
+def neighbor_net(labels: [str], mat: [[float]], cutoff=0.0001, mode: str = "CLS") -> Tuple[list, list]:
     a = time.perf_counter()
     cycle = nnet_cycle.compute(labels, mat)
     b = time.perf_counter()

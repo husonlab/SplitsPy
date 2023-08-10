@@ -45,9 +45,9 @@ def draw(outfile: str, graph: Graph, label_angles: [float] = None, fit: float = 
 
     x_min, x_max, y_min, y_max = graph.bbox()
 
-    x = lambda a: bw / (x_max - x_min) * (a - x_min) + m_left
+    map_x = lambda a: bw / (x_max - x_min) * (a - x_min) + m_left
 
-    y = lambda a: bh / (y_max - y_min) * (a - y_min) + m_top
+    map_y = lambda a: bh / (y_max - y_min) * (a - y_min) + m_top
 
     im = Image.new("RGB", (width, height), (255, 255, 255))
 
@@ -63,7 +63,7 @@ def draw(outfile: str, graph: Graph, label_angles: [float] = None, fit: float = 
 
     points = {}
     for v in graph.nodes():
-        points[v] = (x(v.pos[0]), y(v.pos[1]))
+        points[v] = (map_x(v.pos[0]), map_y(v.pos[1]))
 
     for e in graph.edges():
         im_draw.line([points[e.src()], points[e.tar()]], width=line_width, fill=black)
