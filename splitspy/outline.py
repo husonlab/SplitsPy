@@ -57,6 +57,7 @@ def main():
         --m_right=MARGIN    right margin
         --m_top=MARGIN      top margin
         --m_bot=MARGIN      bottom margin
+        --font_name=F_NAME  font name or path
         --font_size=F_SIZE  font size
 
     Input format:
@@ -123,6 +124,8 @@ def main():
                         metavar="MARGIN")
     win_opts.add_option("--m_bot", default=100, action="store", dest="m_bot", help="bottom margin", type="int",
                         metavar="MARGIN")
+    win_opts.add_option("--font_name", default="Arial", action="store", dest="font_name", help="font size", type="str",
+                        metavar="FONTNAME")
     win_opts.add_option("--font_size", default=12, action="store", dest="font_size", help="font size", type="int",
                         metavar="SIZE")
 
@@ -155,13 +158,13 @@ def main():
     run(labels, matrix, outfile=options.outfile, nexus_file=options.nexus_file, graph_file=options.graph_file,
         mode=options.mode, cutoff=options.cutoff, rooted=options.rooted, alt=options.alt, out_grp=out_grp,
         win_width=options.win_width,win_height=options.win_height, m_left=options.m_left, m_right=options.m_right,
-        m_top=options.m_top, m_bot=options.m_bot,font_size=options.font_size)
+        m_top=options.m_top, m_bot=options.m_bot, font_name=options.font_name, font_size=options.font_size)
 
 
 def run(labels: [str], matrix: [[float]], outfile: str = "", nexus_file: str = "", graph_file: str = "",
         mode: str = "CLS", cutoff: float = 0.0,
         rooted: bool = False, alt: bool = False, out_grp: Set[int] = None, win_width: int = 1000, win_height: int = 800,
-        m_left: int = 100, m_right: int = 100, m_top: int = 100, m_bot: int = 100, font_size: int = 12) -> None:
+        m_left: int = 100, m_right: int = 100, m_top: int = 100, m_bot: int = 100, font_name: str = "Arial", font_size: int = 12) -> None:
 
 
     # distances.write(labels, matrix, outfile)
@@ -178,7 +181,7 @@ def run(labels: [str], matrix: [[float]], outfile: str = "", nexus_file: str = "
     if graph_file != "":
         graph.write_tgf(outfile=graph_file)
 
-    draw.draw(outfile, graph, angles, fit, win_width, win_height,m_left, m_right, m_top, m_bot, font_size)
+    draw.draw(outfile, graph, angles, fit, win_width, win_height, m_left, m_right, m_top, m_bot, font_name, font_size)
 
 
 if __name__ == '__main__':
