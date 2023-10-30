@@ -17,7 +17,7 @@ from splitspy.splits.basic_split import *
 __author__ = "Daniel H. Huson"
 
 
-def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001) -> [Split]:
+def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001, verbose: bool = True) -> [Split]:
     """ compute splits and their weights using Linear Program
         Parameters
         ----------
@@ -82,7 +82,8 @@ def compute(n_tax: int, mat: np.array, cycle: [int], cutoff=0.00001) -> [Split]:
             split = Split(src.part1(),src.part2(),res.x[s])
             result.append(split)
 
-    print(f"Delta: {total+res.fun:0.4f}")
+    if verbose:
+        print(f"Delta: {total+res.fun:0.4f}")
 
     return result
 

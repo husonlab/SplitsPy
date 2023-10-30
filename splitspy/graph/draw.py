@@ -20,7 +20,21 @@ __author__ = 'Daniel H. Huson'
 def draw(outfile: str, graph: Graph, label_angles: [float] = None, fit: float = -1.0,
          width: int = 1000, height: int = 1000,
          m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,
-         font_size: int = 12, scale_factor: int =5) -> None:
+         font_name: str = "Arial", font_size: int = 12, scale_factor: int =5) -> None:
+    im = do_draw(graph=graph, label_angles=label_angles, fit=fit,
+         width=width, height=height,
+         m_left=m_left, m_right=m_right, m_top=m_top, m_bot=m_bot,
+         font_name=font_name, font_size=font_size, scale_factor=scale_factor)
+    if outfile is None or outfile == "":
+        im.show()
+    else:
+        im.save(outfile)
+
+
+def do_draw(graph: Graph, label_angles: [float] = None, fit: float = -1.0,
+         width: int = 1000, height: int = 1000,
+         m_left: int = 150, m_right: int = 150, m_top: int = 150, m_bot: int = 150,
+         font_name: str = "Arial", font_size: int = 12, scale_factor: int =5) -> Image:
 
     width *= scale_factor
     height *= scale_factor
@@ -53,11 +67,11 @@ def draw(outfile: str, graph: Graph, label_angles: [float] = None, fit: float = 
 
     im_draw = ImageDraw.Draw(im)
 
-    font = ImageFont.truetype("Arial",size=font_size)
+    font = ImageFont.truetype(font_name, size=font_size)
     black = (0, 0, 0)
 
     if fit != -1:
-        im_draw.text((40*scale_factor, 10*scale_factor), "Fit: " + ("{:.2f}".format(fit)), font=ImageFont.truetype("Arial",size=10*scale_factor), fill=black)
+        im_draw.text((40*scale_factor, 10*scale_factor), "Fit: " + ("{:.2f}".format(fit)), font=ImageFont.truetype(font_name, size=10*scale_factor), fill=black)
 
     center = (0.5 * width, 0.5 * height)
 
@@ -80,10 +94,7 @@ def draw(outfile: str, graph: Graph, label_angles: [float] = None, fit: float = 
             pos = __label_pos(v.label, font_size, angle, points[v], boxes)
             im_draw.text(pos, v.label, font=font, fill=black)
 
-    if outfile is None or outfile == "":
-        im.show()
-    else:
-        im.save(outfile)
+    return im
 
 
 def __label_pos(label: str, font_size: int, angle: float, pt: Tuple[float,float], boxes: [[Tuple[float,float], float, float]]) -> Tuple[float,float]:

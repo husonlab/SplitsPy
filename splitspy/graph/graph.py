@@ -340,7 +340,7 @@ class Graph(object):
                       sep="", end="", file=outs)
             if v.info is not None:
                 print(" {", v.info, "}", sep="", end="", file=outs)
-            print()
+            print(file=outs)
 
         for e in self.edges():
             print(e.src().id(), e.tar().id(), end="", file=outs)
@@ -348,7 +348,7 @@ class Graph(object):
                 print(" [", "{:.6f}".format(e.weight), "]", sep="", end="", file=outs)
             if e.info is not None:
                 print(" {", e.info, "}", sep="", end="", file=outs)
-            print()
+            print(file=outs)
 
         if outs != sys.stdout:
             outs.close()
